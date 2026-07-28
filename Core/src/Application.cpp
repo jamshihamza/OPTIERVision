@@ -15,7 +15,13 @@ namespace optier
 
     bool Application::Initialize()
     {
+        if (!m_context.Initialize())
+        {
+            return false;
+        }
+
         m_initialized = true;
+
         return true;
     }
 
@@ -28,13 +34,14 @@ namespace optier
 
         // Main application loop (future)
     }
-
     void Application::Shutdown()
     {
         if (!m_initialized)
         {
             return;
         }
+
+        m_context.Shutdown();
 
         m_initialized = false;
     }

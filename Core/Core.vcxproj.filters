@@ -24,6 +24,12 @@
     <ClInclude Include="include\optier\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\optier\ApplicationContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\optier\ConfigurationManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -33,6 +39,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ApplicationContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ConfigurationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

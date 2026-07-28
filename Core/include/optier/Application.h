@@ -1,7 +1,10 @@
 #pragma once
 
+#include <optier/ApplicationContext.h>
+
 namespace optier
 {
+
     class Application
     {
     public:
@@ -13,6 +16,9 @@ namespace optier
         void Shutdown();
 
     private:
-        bool m_initialized;
+        bool m_initialized = false;
+
+        ApplicationContext m_context;
     };
+
 }
