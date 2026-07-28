@@ -147,6 +147,7 @@
     <ClInclude Include="include\optier\Logger.h" />
     <ClInclude Include="include\optier\LogLevel.h" />
     <ClInclude Include="include\optier\Result.h" />
+    <ClInclude Include="include\optier\Version.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Logger.cpp" />
+    <ClCompile Include="src\Version.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
