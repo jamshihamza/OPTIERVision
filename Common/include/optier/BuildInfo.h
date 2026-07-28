@@ -1,21 +1,17 @@
 #pragma once
 
-#include <string>
-
-#include <optier/Version.h>
+#include <string_view>
 
 namespace optier
 {
     class BuildInfo
     {
     public:
-        
-        static const std::string& BuildType();
-        static const std::string& Compiler();
-        static const std::string& Platform();
-
-        static const std::string& BuildDate();
-        static const std::string& BuildTime();
+        static std::string_view BuildType() noexcept;
+        static std::string_view Compiler() noexcept;
+        static std::string_view Platform() noexcept;
+        static std::string_view BuildDate() noexcept;
+        static std::string_view BuildTime() noexcept;
 
     private:
         BuildInfo() = delete;

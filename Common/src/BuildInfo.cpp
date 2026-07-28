@@ -2,51 +2,53 @@
 
 #include <optier/BuildInfo.h>
 
-namespace optier
+namespace
 {
-    namespace
-    {
-       
 #ifdef _DEBUG
-        const std::string kBuildType = "Debug";
+    constexpr std::string_view kBuildType = "Debug";
 #else
-        const std::string kBuildType = "Release";
+    constexpr std::string_view kBuildType = "Release";
 #endif
 
 #ifdef _WIN64
-        const std::string kPlatform = "x64";
+    constexpr std::string_view kPlatform = "x64";
 #else
-        const std::string kPlatform = "x86";
+    constexpr std::string_view kPlatform = "x86";
 #endif
 
-        const std::string kCompiler = "MSVC " + std::to_string(_MSC_VER);
+#ifdef _MSC_VER
+    constexpr std::string_view kCompiler = "MSVC";
+#else
+    constexpr std::string_view kCompiler = "Unknown";
+#endif
 
-        const std::string kBuildDate = __DATE__;
-        const std::string kBuildTime = __TIME__;
-    }
+    constexpr std::string_view kBuildDate = __DATE__;
+    constexpr std::string_view kBuildTime = __TIME__;
+}
 
-  
-    const std::string& BuildInfo::BuildType()
+namespace optier
+{
+    std::string_view BuildInfo::BuildType() noexcept
     {
         return kBuildType;
     }
 
-    const std::string& BuildInfo::Compiler()
+    std::string_view BuildInfo::Compiler() noexcept
     {
         return kCompiler;
     }
 
-    const std::string& BuildInfo::Platform()
+    std::string_view BuildInfo::Platform() noexcept
     {
         return kPlatform;
     }
 
-    const std::string& BuildInfo::BuildDate()
+    std::string_view BuildInfo::BuildDate() noexcept
     {
         return kBuildDate;
     }
 
-    const std::string& BuildInfo::BuildTime()
+    std::string_view BuildInfo::BuildTime() noexcept
     {
         return kBuildTime;
     }
