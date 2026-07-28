@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 #include <string>
 
@@ -10,11 +9,7 @@ namespace optier
     class BuildInfo
     {
     public:
-        static const std::string& ApplicationName();
-        static const std::string& CompanyName();
-
-        static const Version& ApplicationVersion();
-
+        
         static const std::string& BuildType();
         static const std::string& Compiler();
         static const std::string& Platform();

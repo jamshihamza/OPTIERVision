@@ -1,10 +1,23 @@
 #pragma once
 
+#include <string_view>
+
+#include <optier/Version.h>
+
 namespace optier
 {
-    inline constexpr const char* kApplicationName = "OPTIER Vision";
-    inline constexpr const char* kCompanyName = "AZOAN Technologies India LLP";
-    inline constexpr const char* kCopyright = "Copyright (c) 2026 AZOAN Technologies India LLP";
-    inline constexpr const char* kWebsite = "https://www.optier.ai";
-    inline constexpr const char* kSupportEmail = "support@optier.ai";
+    class ProjectInfo
+    {
+    public:
+        static std::string_view ApplicationName() noexcept;
+        static std::string_view CompanyName() noexcept;
+        static std::string_view Website() noexcept;
+        static std::string_view SupportEmail() noexcept;
+        static std::string_view Copyright() noexcept;
+
+        static const Version& Version() noexcept;
+
+    private:
+        ProjectInfo() = delete;
+    };
 }
