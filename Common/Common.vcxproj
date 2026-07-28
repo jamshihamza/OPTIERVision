@@ -142,10 +142,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="include\optier\BuildInfo.h" />
     <ClInclude Include="include\optier\CommonExport.h" />
     <ClInclude Include="include\optier\ErrorCode.h" />
     <ClInclude Include="include\optier\Logger.h" />
     <ClInclude Include="include\optier\LogLevel.h" />
+    <ClInclude Include="include\optier\ProjectInfo.h" />
     <ClInclude Include="include\optier\Result.h" />
     <ClInclude Include="include\optier\Version.h" />
     <ClInclude Include="pch.h" />
