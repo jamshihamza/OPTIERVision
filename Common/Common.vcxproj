@@ -146,6 +146,7 @@
     <ClInclude Include="include\optier\ErrorCode.h" />
     <ClInclude Include="include\optier\Logger.h" />
     <ClInclude Include="include\optier\LogLevel.h" />
+    <ClInclude Include="include\optier\Result.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

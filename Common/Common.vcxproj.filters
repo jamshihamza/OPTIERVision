@@ -33,6 +33,9 @@
     <ClInclude Include="include\optier\ErrorCode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\optier\Result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common.cpp">
