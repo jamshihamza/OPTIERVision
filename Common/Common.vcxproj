@@ -149,6 +149,7 @@
     <ClInclude Include="include\optier\BuildInfo.h" />
     <ClInclude Include="include\optier\CommonExport.h" />
     <ClInclude Include="include\optier\ErrorCode.h" />
+    <ClInclude Include="include\optier\FileSystem.h" />
     <ClInclude Include="include\optier\Logger.h" />
     <ClInclude Include="include\optier\LogLevel.h" />
     <ClInclude Include="include\optier\ProjectInfo.h" />
@@ -165,6 +166,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\BuildInfo.cpp" />
+    <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\ProjectInfo.cpp" />
     <ClCompile Include="src\Version.cpp" />
