@@ -1,6 +1,7 @@
 #include "pch.h"
 #include <optier/ConfigurationManager.h>
 #include <optier/Configuration.h>
+#include <optier/FileSystem.h>
 namespace optier
 {
 
@@ -10,9 +11,12 @@ namespace optier
 
     bool ConfigurationManager::Load()
     {
-        m_configuration.Application.Name = "OPTIER Vision Enterprise";
-        m_configuration.Logging.Level = "Debug";
-        m_configuration.Network.RtspPort = 8554;
+        constexpr auto kConfigPath = "config/config.json";
+
+        if (!FileSystem::Exists(kConfigPath))
+        {
+            return false;
+        }
 
         return true;
     }

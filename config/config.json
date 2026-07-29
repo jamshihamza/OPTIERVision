@@ -1,0 +1,13 @@
+{
+    "Application": {
+        "Name": "OPTIER Vision"
+    },
+
+    "Logging": {
+        "Level": "Info"
+    },
+
+    "Network": {
+        "RtspPort": 554
+    }
+}
