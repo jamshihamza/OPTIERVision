@@ -8,18 +8,20 @@ namespace optier
     ApplicationContext::ApplicationContext()
     {
     }
+
     bool ApplicationContext::Initialize()
     {
-        if (!m_configuration.Load())
-        {
-            return false;
-        }
-        const auto& config = m_configuration.GetConfiguration();
-        return true;
+        return m_configuration.Load();
     }
 
     void ApplicationContext::Shutdown()
     {
+    }
+
+    const ConfigurationManager&
+        ApplicationContext::GetConfigurationManager() const
+    {
+        return m_configuration;
     }
 
 }

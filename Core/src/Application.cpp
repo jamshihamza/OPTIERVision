@@ -45,4 +45,9 @@ namespace optier
 
         m_initialized = false;
     }
+    const ApplicationContext&
+        Application::GetContext() const
+    {
+        return m_context;
+    }
 }

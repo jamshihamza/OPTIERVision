@@ -8,6 +8,8 @@ namespace optier
     class Application
     {
     public:
+        const ApplicationContext& GetContext() const;
+
         Application();
         virtual ~Application();
 
