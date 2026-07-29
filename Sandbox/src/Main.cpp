@@ -1,38 +1,19 @@
-#include <iostream>
+#include "pch.h"
 
-#include <optier/FileSystem.h>
-#include <optier/JsonDocument.h>
-#include <optier/JsonObject.h>
+#include <optier/Application.h>
 
 int main()
 {
-    auto file =
-        optier::FileSystem::ReadTextFile(
-            "config/config.json");
+    optier::Application application;
 
-    if (!file.IsSuccess())
+    if (!application.Initialize())
     {
         return -1;
     }
 
-    optier::JsonDocument document;
+    application.Run();
 
-    if (!document.Parse(file.Value()))
-    {
-        return -1;
-    }
-
-    auto application =
-        document.GetObject("Application");
-
-    if (!application.IsValid())
-    {
-        return -1;
-    }
-
-    std::cout
-        << application.GetString("Name")
-        << '\n';
+    application.Shutdown();
 
     return 0;
 }
