@@ -14,7 +14,7 @@ namespace optier
         {
             return false;
         }
-
+        const auto& config = m_configuration.GetConfiguration();
         return true;
     }
 
