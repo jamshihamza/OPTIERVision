@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-
+#include <mutex>
 #include <optier/LogLevel.h>
 
 namespace optier
@@ -45,6 +45,8 @@ namespace optier
             const std::string& message);
 
     private:
+
+        static std::mutex s_mutex;
 
         static LogLevel s_level;
     };

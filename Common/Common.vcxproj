@@ -156,6 +156,7 @@
     <ClInclude Include="include\optier\LogLevel.h" />
     <ClInclude Include="include\optier\ProjectInfo.h" />
     <ClInclude Include="include\optier\Result.h" />
+    <ClInclude Include="include\optier\ThreadPool.h" />
     <ClInclude Include="include\optier\Version.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
@@ -173,6 +174,7 @@
     <ClCompile Include="src\JsonObject.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\ProjectInfo.cpp" />
+    <ClCompile Include="src\ThreadPool.cpp" />
     <ClCompile Include="src\Version.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

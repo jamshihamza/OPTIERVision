@@ -1,47 +1,73 @@
 #include "pch.h"
-
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 #include <optier/Application.h>
+#include <optier/ConfigurationManager.h>
 #include <optier/Logger.h>
+#include <optier/ThreadPool.h>
+
 int main()
 {
-    using namespace optier;
-    optier::Application application;
+    optier::Application app;
 
-    if (!application.Initialize())
+    if (!app.Initialize())
     {
-        std::cout << "Initialization Failed\n";
+        std::cout << "Application initialization failed." << std::endl;
         return -1;
     }
 
     const auto& config =
-        application
-        .GetContext()
+        app.GetContext()
         .GetConfigurationManager()
         .GetConfiguration();
 
+    std::cout << std::endl;
+
     std::cout << "Application : "
-        << config.Application.Name
-        << '\n';
+        << config.Application.Name << std::endl;
 
     std::cout << "Log Level   : "
-        << config.Logging.Level
-        << '\n';
+        << config.Logging.Level << std::endl;
 
     std::cout << "RTSP Port   : "
-        << config.Network.RtspPort
-        << '\n';
+        << config.Network.RtspPort << std::endl;
 
-    application.Shutdown();
+    std::cout << std::endl;
 
-    Logger::Initialize();
+    optier::Logger::Initialize();
 
-    Logger::Trace("Trace Message");
-    Logger::Debug("Debug Message");
-    Logger::Info("Application Started");
-    Logger::Warning("Camera Offline");
-    Logger::Error("Unable to Connect");
-    Logger::Critical("System Failure");
+    optier::Logger::Info("Application Started");
+
+    std::cout << std::endl;
+
+    optier::ThreadPool pool(4);
+
+    for (int i = 1; i <= 10; ++i)
+    {
+        pool.Enqueue(
+            [i]()
+            {
+                optier::Logger::Info(
+                    "Task " + std::to_string(i) + " Started");
+
+                std::this_thread::sleep_for(
+                    std::chrono::seconds(1));
+
+                optier::Logger::Info(
+                    "Task " + std::to_string(i) + " Finished");
+            });
+    }
+
+    std::this_thread::sleep_for(
+        std::chrono::seconds(4));
+
+    pool.Shutdown();
+
+    optier::Logger::Info("Thread Pool Shutdown");
+
+    app.Shutdown();
+
     return 0;
 }

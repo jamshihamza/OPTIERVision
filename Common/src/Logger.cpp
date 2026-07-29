@@ -6,7 +6,7 @@
 
 namespace optier
 {
-
+    std::mutex Logger::s_mutex;
     LogLevel Logger::s_level = LogLevel::Info;
 
     void Logger::Initialize()
@@ -61,6 +61,7 @@ namespace optier
         LogLevel level,
         const std::string& message)
     {
+        std::lock_guard<std::mutex> lock(s_mutex);
         if (level < s_level)
         {
             return;
