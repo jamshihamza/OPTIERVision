@@ -3,9 +3,10 @@
 #include <iostream>
 
 #include <optier/Application.h>
-
+#include <optier/Logger.h>
 int main()
 {
+    using namespace optier;
     optier::Application application;
 
     if (!application.Initialize())
@@ -34,5 +35,13 @@ int main()
 
     application.Shutdown();
 
+    Logger::Initialize();
+
+    Logger::Trace("Trace Message");
+    Logger::Debug("Debug Message");
+    Logger::Info("Application Started");
+    Logger::Warning("Camera Offline");
+    Logger::Error("Unable to Connect");
+    Logger::Critical("System Failure");
     return 0;
 }

@@ -1,11 +1,14 @@
 #include "pch.h"
 
-#include <iostream>
-
 #include <optier/Logger.h>
+
+#include <iostream>
 
 namespace optier
 {
+
+    LogLevel Logger::s_level = LogLevel::Info;
+
     void Logger::Initialize()
     {
     }
@@ -14,39 +17,83 @@ namespace optier
     {
     }
 
-    void Logger::Log(LogLevel level, const std::string& message)
+    void Logger::SetLevel(LogLevel level)
     {
-        std::cout << "[" << static_cast<int>(level) << "] "
-            << message << std::endl;
+        s_level = level;
+    }
+
+    LogLevel Logger::GetLevel()
+    {
+        return s_level;
     }
 
     void Logger::Trace(const std::string& message)
     {
-        Log(LogLevel::Trace, message);
+        Write(LogLevel::Trace, message);
     }
 
     void Logger::Debug(const std::string& message)
     {
-        Log(LogLevel::Debug, message);
+        Write(LogLevel::Debug, message);
     }
 
     void Logger::Info(const std::string& message)
     {
-        Log(LogLevel::Info, message);
+        Write(LogLevel::Info, message);
     }
 
     void Logger::Warning(const std::string& message)
     {
-        Log(LogLevel::Warning, message);
+        Write(LogLevel::Warning, message);
     }
 
     void Logger::Error(const std::string& message)
     {
-        Log(LogLevel::Error, message);
+        Write(LogLevel::Error, message);
     }
 
     void Logger::Critical(const std::string& message)
     {
-        Log(LogLevel::Critical, message);
+        Write(LogLevel::Critical, message);
     }
+
+    void Logger::Write(
+        LogLevel level,
+        const std::string& message)
+    {
+        if (level < s_level)
+        {
+            return;
+        }
+
+        switch (level)
+        {
+        case LogLevel::Trace:
+            std::cout << "[TRACE] ";
+            break;
+
+        case LogLevel::Debug:
+            std::cout << "[DEBUG] ";
+            break;
+
+        case LogLevel::Info:
+            std::cout << "[INFO ] ";
+            break;
+
+        case LogLevel::Warning:
+            std::cout << "[WARN ] ";
+            break;
+
+        case LogLevel::Error:
+            std::cout << "[ERROR] ";
+            break;
+
+        case LogLevel::Critical:
+            std::cout << "[FATAL] ";
+            break;
+        }
+
+        std::cout << message << std::endl;
+    }
+
 }

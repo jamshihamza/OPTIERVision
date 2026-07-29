@@ -2,6 +2,7 @@
 
 namespace optier
 {
+
     enum class LogLevel
     {
         Trace = 0,
@@ -9,7 +10,7 @@ namespace optier
         Info,
         Warning,
         Error,
-        Critical,
-        Off
+        Critical
     };
+
 }
