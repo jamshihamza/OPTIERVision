@@ -1,17 +1,16 @@
-#include <optier/Application.h>
-#include <optier/FileSystem.h>
 #include <iostream>
+#include <nlohmann/json.hpp>
 
 int main()
 {
-    auto result =
-        optier::FileSystem::ReadTextFile(
-            "config/config.json");
+    using json = nlohmann::json;
 
-    if (!result.IsSuccess())
-    {
-        return -1;
-    }
+    json document;
 
-    std::cout << result.Value() << '\n';
+    document["Name"] = "OPTIER";
+    document["Version"] = "1.0";
+
+    std::cout << document.dump(4) << '\n';
+
+    return 0;
 }
