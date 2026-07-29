@@ -151,6 +151,7 @@
     <ClInclude Include="include\optier\ErrorCode.h" />
     <ClInclude Include="include\optier\FileSystem.h" />
     <ClInclude Include="include\optier\JsonDocument.h" />
+    <ClInclude Include="include\optier\JsonObject.h" />
     <ClInclude Include="include\optier\Logger.h" />
     <ClInclude Include="include\optier\LogLevel.h" />
     <ClInclude Include="include\optier\ProjectInfo.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="src\BuildInfo.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\JsonDocument.cpp" />
+    <ClCompile Include="src\JsonObject.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\ProjectInfo.cpp" />
     <ClCompile Include="src\Version.cpp" />

@@ -3,6 +3,8 @@
 #include <memory>
 #include <string>
 
+#include <optier/JsonObject.h>
+
 namespace optier
 {
 
@@ -19,13 +21,14 @@ namespace optier
         JsonDocument(JsonDocument&&) noexcept;
         JsonDocument& operator=(JsonDocument&&) noexcept;
 
-        bool Parse(const std::string& text);
+        bool Parse(
+            const std::string& text);
 
-        bool Contains(const std::string& key) const;
+        bool Contains(
+            const std::string& key) const;
 
-        std::string GetString(const std::string& key) const;
-
-        int GetInt(const std::string& key) const;
+        JsonObject GetObject(
+            const std::string& key) const;
 
     private:
 

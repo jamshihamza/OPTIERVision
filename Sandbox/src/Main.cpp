@@ -1,7 +1,8 @@
 #include <iostream>
-#include <nlohmann/json.hpp>
+
 #include <optier/FileSystem.h>
 #include <optier/JsonDocument.h>
+#include <optier/JsonObject.h>
 
 int main()
 {
@@ -21,7 +22,17 @@ int main()
         return -1;
     }
 
+    auto application =
+        document.GetObject("Application");
+
+    if (!application.IsValid())
+    {
+        return -1;
+    }
+
     std::cout
-        << document.GetString("Application")
+        << application.GetString("Name")
         << '\n';
+
+    return 0;
 }

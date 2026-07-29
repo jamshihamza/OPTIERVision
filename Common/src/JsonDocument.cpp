@@ -57,14 +57,22 @@ namespace optier
         return m_impl->Document.contains(key);
     }
 
-    std::string JsonDocument::GetString(const std::string& key) const
+    JsonObject JsonDocument::GetObject(
+        const std::string& key) const
     {
-        return m_impl->Document.at(key).get<std::string>();
-    }
+        if (!m_impl->Document.contains(key))
+        {
+            return JsonObject();
+        }
 
-    int JsonDocument::GetInt(const std::string& key) const
-    {
-        return m_impl->Document.at(key).get<int>();
+        const auto& value = m_impl->Document.at(key);
+
+        if (!value.is_object())
+        {
+            return JsonObject();
+        }
+
+        return JsonObject(&value);
     }
 
 }
