@@ -1,7 +1,8 @@
 #pragma once
 
 #include <filesystem>
-
+#include <string>
+#include <optier/Result.h>
 namespace optier
 {
 
@@ -14,6 +15,8 @@ namespace optier
         static bool CreateDirectory(const std::filesystem::path& path);
 
         static bool Remove(const std::filesystem::path& path);
+
+        static Result<std::string> ReadTextFile(const std::filesystem::path& path);
     };
 
 }

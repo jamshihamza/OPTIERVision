@@ -1,18 +1,17 @@
 #include <optier/Application.h>
 #include <optier/FileSystem.h>
+#include <iostream>
 
 int main()
 {
-    optier::Application application;
-    optier::FileSystem::CreateDirectory("logs");
+    auto result =
+        optier::FileSystem::ReadTextFile(
+            "config/config.json");
 
-    if (!application.Initialize())
+    if (!result.IsSuccess())
     {
         return -1;
     }
 
-    application.Run();
-    application.Shutdown();
-
-    return 0;
+    std::cout << result.Value() << '\n';
 }
