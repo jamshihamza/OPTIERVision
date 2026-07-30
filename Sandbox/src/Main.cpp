@@ -7,9 +7,20 @@
 #include <optier/ConfigurationManager.h>
 #include <optier/Logger.h>
 #include <optier/ThreadPool.h>
+#include <optier/Event.h>
+#include <optier/EventDispatcher.h>
 
 int main()
 {
+    class TestEvent : public optier::Event
+    {
+    public:
+        std::string GetName() const override
+        {
+            return "TestEvent";
+        }
+    };
+
     optier::Application app;
 
     if (!app.Initialize())
@@ -69,5 +80,31 @@ int main()
 
     app.Shutdown();
 
+    optier::EventDispatcher dispatcher;
+
+    dispatcher.Subscribe(
+        [](const optier::Event&)
+        {
+            optier::Logger::Info(
+                "Recorder Module Received Event");
+        });
+
+    dispatcher.Subscribe(
+        [](const optier::Event&)
+        {
+            optier::Logger::Info(
+                "Notification Module Received Event");
+        });
+
+    dispatcher.Subscribe(
+        [](const optier::Event&)
+        {
+            optier::Logger::Info(
+                "UI Module Received Event");
+        });
+
+    TestEvent event;
+
+    dispatcher.Dispatch(event);
     return 0;
 }
