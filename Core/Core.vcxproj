@@ -140,10 +140,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="include\optier\AICapability.h" />
     <ClInclude Include="include\optier\Application.h" />
     <ClInclude Include="include\optier\ApplicationContext.h" />
+    <ClInclude Include="include\optier\CameraInfo.h" />
     <ClInclude Include="include\optier\Configuration.h" />
     <ClInclude Include="include\optier\ConfigurationManager.h" />
+    <ClInclude Include="include\optier\ConnectionState.h" />
+    <ClInclude Include="include\optier\Device.h" />
+    <ClInclude Include="include\optier\DeviceInfo.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +163,7 @@
     <ClCompile Include="src\ApplicationContext.cpp" />
     <ClCompile Include="src\Configuration.cpp" />
     <ClCompile Include="src\ConfigurationManager.cpp" />
+    <ClCompile Include="src\Device.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.vcxproj">
