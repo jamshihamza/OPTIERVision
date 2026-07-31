@@ -44,6 +44,12 @@ namespace optier
 
         std::size_t Capacity() const;
 
+        void Shutdown();
+
+        void Reset();
+
+        bool IsShutdown() const;
+
     private:
 
         mutable std::mutex m_mutex;
@@ -53,6 +59,8 @@ namespace optier
         std::deque<VideoFrame> m_queue;
 
         std::size_t m_capacity;
+
+        bool m_shutdown{ false };
     };
 
 }

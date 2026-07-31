@@ -1,44 +1,48 @@
 #include "pch.h"
+#include <chrono>
 #include <iostream>
+#include <thread>
 
-#include <optier/FrameQueue.h>
-#include <optier/VideoFrame.h>
+#include "optier/OpenCVRTSPClient.h"
+#include "optier/FrameQueue.h"
+#include "optier/CaptureThread.h"
+#include "optier/ConsumerThread.h"
 
 using namespace optier;
 
 int main()
 {
-    FrameQueue queue(3);
+    OpenCVRTSPClient client;
 
-    std::cout << "Capacity : " << queue.Capacity() << '\n';
-    std::cout << "Empty    : " << std::boolalpha << queue.Empty() << '\n';
+    if (!client.Connect("rtsp://admin:Opt@12345@192.168.10.3:554/rtsp/streaming?channel=01&subtype=0"))
+    {
+        std::cout << "Failed to connect\n";
+        return -1;
+    }
 
-    VideoFrame frame1;
-    VideoFrame frame2;
-    VideoFrame frame3;
-    VideoFrame frame4;
+    FrameQueue queue(30);
 
-    std::cout << "\n=== Push Test ===\n";
+    CaptureThread capture(client, queue);
+    ConsumerThread consumer(queue);
 
-    std::cout << "Push 1 : " << queue.Push(std::move(frame1)) << '\n';
-    std::cout << "Push 2 : " << queue.Push(std::move(frame2)) << '\n';
-    std::cout << "Push 3 : " << queue.Push(std::move(frame3)) << '\n';
-    std::cout << "Push 4 : " << queue.Push(std::move(frame4)) << '\n';
+    capture.Start();
+    consumer.Start();
 
-    std::cout << "\nSize : " << queue.Size() << '\n';
-    std::cout << "Full : " << queue.Full() << '\n';
+    std::cout << "Pipeline running...\n";
 
-    std::cout << "\n=== Pop Test ===\n";
+    std::this_thread::sleep_for(std::chrono::seconds(10));
 
-    VideoFrame output;
+    std::cout << "Stopping...\n";
 
-    std::cout << "Pop 1 : " << queue.Pop(output) << '\n';
-    std::cout << "Pop 2 : " << queue.Pop(output) << '\n';
-    std::cout << "Pop 3 : " << queue.Pop(output) << '\n';
-    std::cout << "Pop 4 : " << queue.Pop(output) << '\n';
+    capture.Stop();
+    consumer.Stop();
 
-    std::cout << "\nSize  : " << queue.Size() << '\n';
-    std::cout << "Empty : " << queue.Empty() << '\n';
+    client.Disconnect();
+
+    std::cout
+        << "Processed Frames : "
+        << consumer.ProcessedFrames()
+        << std::endl;
 
     return 0;
 }

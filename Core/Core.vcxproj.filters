@@ -75,7 +75,10 @@
     <ClInclude Include="include\optier\IRTSPClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\optier\OpenCVRTSPClient.h">
+    <ClInclude Include="include\optier\CaptureThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\optier\ConsumerThread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,7 +113,10 @@
     <ClCompile Include="src\DeviceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\OpenCVRTSPClient.cpp">
+    <ClCompile Include="src\CaptureThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ConsumerThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
