@@ -15,3 +15,5 @@ obj/
 .vscode/
 
 CMakeSettings.json
+# OpenCV
+libraries/opencv/

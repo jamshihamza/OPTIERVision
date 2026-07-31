@@ -144,6 +144,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Backend\Backend.vcxproj">
+      <Project>{b77329a0-2e29-40a5-a094-1330692b2c7c}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.vcxproj">
       <Project>{2a933d56-b2d6-4ea6-b94a-37f65b898f62}</Project>
     </ProjectReference>
