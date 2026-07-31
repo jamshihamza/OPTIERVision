@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <optier/Camera.h>
+#include <optier/NVR.h>
 
 int main()
 {
@@ -184,6 +185,78 @@ int main()
     std::cout << "Connection State : "
         << static_cast<int>(camera.GetConnectionState())
         << '\n';
+
+    //----------------------------------------------------------
+// NVR Test
+//----------------------------------------------------------
+
+    std::cout << "\n=========================================\n";
+    std::cout << "              NVR TEST\n";
+    std::cout << "=========================================\n\n";
+
+    DeviceInfo nvrDeviceInfo;
+
+    nvrDeviceInfo.Id = "NVR001";
+    nvrDeviceInfo.Name = "Main Office NVR";
+    nvrDeviceInfo.IPAddress = "192.168.1.100";
+    nvrDeviceInfo.Port = 8000;
+    nvrDeviceInfo.Username = "admin";
+    nvrDeviceInfo.Password = "admin";
+    nvrDeviceInfo.Manufacturer = "OPTIER";
+    nvrDeviceInfo.Model = "NVR-64CH";
+    nvrDeviceInfo.FirmwareVersion = "2.1.0";
+    nvrDeviceInfo.MacAddress = "AA:BB:CC:DD:EE:FF";
+
+    NVRInfo nvrInfo;
+
+    nvrInfo.ChannelCount = 64;
+    nvrInfo.MaxRecordingChannels = 64;
+    nvrInfo.SupportsPlayback = true;
+    nvrInfo.SupportsBackup = true;
+    nvrInfo.SupportsRAID = true;
+    nvrInfo.MaxDiskCount = 8;
+    nvrInfo.MaxStorageCapacityGB = 64000;
+
+    NVR nvr(nvrDeviceInfo, nvrInfo);
+
+    std::cout << "NVR Created Successfully\n";
+
+    nvr.Connect();
+
+    std::cout << "Connection State : "
+        << static_cast<int>(nvr.GetConnectionState())
+        << '\n';
+
+    const NVRInfo& nvrInforRef = nvr.GetNVRInfo();
+
+    std::cout << "Channels         : "
+        << nvrInforRef.ChannelCount
+        << '\n';
+
+    std::cout << "Playback         : "
+        << std::boolalpha
+        << nvrInforRef.SupportsPlayback
+        << '\n';
+
+    std::cout << "Backup           : "
+        << nvrInforRef.SupportsBackup
+        << '\n';
+
+    std::cout << "RAID             : "
+        << nvrInforRef.SupportsRAID
+        << '\n';
+
+    std::cout << "Disk Count       : "
+        << nvrInforRef.MaxDiskCount
+        << '\n';
+
+    std::cout << "Storage (GB)     : "
+        << nvrInforRef.MaxStorageCapacityGB
+        << '\n';
+
+    nvr.Disconnect();
+
+    std::cout << "Disconnected Successfully\n";
 
     std::cout << "\n=========================================\n";
     std::cout << "Sandbox Test Completed Successfully\n";
