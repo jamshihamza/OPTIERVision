@@ -152,6 +152,7 @@
     <ClInclude Include="include\optier\ErrorCode.h" />
     <ClInclude Include="include\optier\Event.h" />
     <ClInclude Include="include\optier\FileSystem.h" />
+    <ClInclude Include="include\optier\FrameQueue.h" />
     <ClInclude Include="include\optier\JsonDocument.h" />
     <ClInclude Include="include\optier\JsonObject.h" />
     <ClInclude Include="include\optier\Logger.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="src\BuildInfo.cpp" />
     <ClCompile Include="src\EventDispatcher.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
+    <ClCompile Include="src\FrameQueue.cpp" />
     <ClCompile Include="src\JsonDocument.cpp" />
     <ClCompile Include="src\JsonObject.cpp" />
     <ClCompile Include="src\Logger.cpp" />
