@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <memory>
+#include <optier/DeviceManager.h>
 #include <optier/Camera.h>
 #include <optier/NVR.h>
 
@@ -257,7 +259,74 @@ int main()
     nvr.Disconnect();
 
     std::cout << "Disconnected Successfully\n";
+    //----------------------------------------------------------
+// DeviceManager Test
+//----------------------------------------------------------
 
+    std::cout << "\n=========================================\n";
+    std::cout << "         DeviceManager TEST\n";
+    std::cout << "=========================================\n\n";
+
+    DeviceManager deviceManager;
+
+    // Create shared objects
+    auto cameraDevice =
+        std::make_shared<Camera>(deviceInfo, cameraInfo);
+
+    auto nvrDevice =
+        std::make_shared<NVR>(nvrDeviceInfo, nvrInfo);
+
+    // Add devices
+    bool cameraAdded = deviceManager.AddDevice(cameraDevice);
+    bool nvrAdded = deviceManager.AddDevice(nvrDevice);
+
+    std::cout << "Camera Added : "
+        << std::boolalpha
+        << cameraAdded
+        << '\n';
+
+    std::cout << "NVR Added    : "
+        << std::boolalpha
+        << nvrAdded
+        << '\n';
+
+    // Device count
+    std::cout << "Device Count : "
+        << deviceManager.GetDeviceCount()
+        << '\n';
+
+    // Search Camera
+    auto device = deviceManager.GetDevice("CAM001");
+
+    if (device != nullptr)
+    {
+        std::cout << "\nFound Device\n";
+
+        std::cout << "ID   : "
+            << device->GetInfo().Id
+            << '\n';
+
+        std::cout << "Name : "
+            << device->GetInfo().Name
+            << '\n';
+    }
+    else
+    {
+        std::cout << "Device Not Found\n";
+    }
+
+    // Remove NVR
+    bool removed =
+        deviceManager.RemoveDevice("NVR001");
+
+    std::cout << "\nNVR Removed : "
+        << std::boolalpha
+        << removed
+        << '\n';
+
+    std::cout << "Device Count : "
+        << deviceManager.GetDeviceCount()
+        << '\n';
     std::cout << "\n=========================================\n";
     std::cout << "Sandbox Test Completed Successfully\n";
     std::cout << "=========================================\n";

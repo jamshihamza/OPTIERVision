@@ -151,6 +151,7 @@
     <ClInclude Include="include\optier\ConnectionState.h" />
     <ClInclude Include="include\optier\Device.h" />
     <ClInclude Include="include\optier\DeviceInfo.h" />
+    <ClInclude Include="include\optier\DeviceManager.h" />
     <ClInclude Include="include\optier\NVR.h" />
     <ClInclude Include="include\optier\NVRInfo.h" />
     <ClInclude Include="include\optier\NVRStatus.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="src\Configuration.cpp" />
     <ClCompile Include="src\ConfigurationManager.cpp" />
     <ClCompile Include="src\Device.cpp" />
+    <ClCompile Include="src\DeviceManager.cpp" />
     <ClCompile Include="src\NVR.cpp" />
   </ItemGroup>
   <ItemGroup>
