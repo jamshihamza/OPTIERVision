@@ -6,11 +6,6 @@
 #include <optier/IRTSPClient.h>
 #include <optier/StreamState.h>
 
-namespace cv
-{
-    class VideoCapture;
-}
-
 namespace optier
 {
 
@@ -36,11 +31,9 @@ namespace optier
 
     private:
 
-        std::unique_ptr<cv::VideoCapture> m_capture;
+        class Impl;
 
-        StreamState m_state = StreamState::Disconnected;
-
-        std::uint64_t m_frameNumber = 0;
+        std::unique_ptr<Impl> m_impl;
     };
 
 }

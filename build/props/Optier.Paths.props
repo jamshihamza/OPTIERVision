@@ -9,7 +9,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(SolutionDir)Common\include;$(SolutionDir)Core\include;$(SolutionDir)libraries;D:\Projects\OPTIER\OPTIERVision\libraries\opencv\build\include\opencv2\videoio;$(OpenCVDir)\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(SolutionDir)Common\include;$(SolutionDir)Core\include;$(SolutionDir)libraries;D:\Projects\OPTIER\OPTIERVision\libraries\opencv\build\include\opencv2\videoio;$(OpenCVDir)\include;$(ProjectDir);$(SolutionDir)Backend\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup>
