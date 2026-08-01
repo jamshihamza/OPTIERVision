@@ -1,5 +1,6 @@
 #include "pch.h"
 #include <optier/FrameProcessorPipeline.h>
+#include <iostream>
 
 namespace optier
 {
@@ -18,6 +19,10 @@ namespace optier
     bool FrameProcessorPipeline::ProcessFrame(
         VideoFrame& frame)
     {
+        std::cout
+            << "[Pipeline] Frame "
+            << frame.FrameNumber
+            << '\n';
         for (const auto& processor : m_processors)
         {
             if (!processor->ProcessFrame(frame))

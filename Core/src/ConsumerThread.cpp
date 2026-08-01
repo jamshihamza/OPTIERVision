@@ -73,7 +73,7 @@ namespace optier
 
             bool ok = m_pipeline.ProcessFrame(frame);
 
-            if (!m_pipeline.ProcessFrame(frame))
+            if (!ok)
             {
                 continue;
             }
