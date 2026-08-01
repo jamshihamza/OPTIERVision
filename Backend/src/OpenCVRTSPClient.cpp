@@ -6,6 +6,7 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/videoio.hpp>
 
+#include <memory>
 #include <chrono>
 
 namespace optier
@@ -115,8 +116,9 @@ namespace optier
         frame.Timestamp =
             std::chrono::steady_clock::now();
 
-        frame.NativeFrame =
-            &m_impl->Frame;
+        frame.Image =
+            std::make_shared<cv::Mat>(
+                m_impl->Frame.clone());
 
         return true;
     }

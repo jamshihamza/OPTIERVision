@@ -1,11 +1,15 @@
 #include "pch.h"
 #include <optier/ConsumerThread.h>
+#include <iostream>
 
 namespace optier
 {
 
-    ConsumerThread::ConsumerThread(FrameQueue& queue)
+    ConsumerThread::ConsumerThread(
+        FrameQueue& queue,
+        FrameProcessorPipeline& pipeline)
         : m_queue(queue)
+        , m_pipeline(pipeline)
     {
     }
 
@@ -65,14 +69,15 @@ namespace optier
             {
                 break;
             }
+          
 
-            //
-            // Future:
-            // Renderer
-            // AI Engine
-            // Recorder
-            //
+            bool ok = m_pipeline.ProcessFrame(frame);
 
+            if (!m_pipeline.ProcessFrame(frame))
+            {
+                continue;
+            }
+      
             ++m_processedFrames;
         }
     }

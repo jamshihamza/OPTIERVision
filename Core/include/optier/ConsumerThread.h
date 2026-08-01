@@ -5,6 +5,7 @@
 #include <thread>
 
 #include <optier/FrameQueue.h>
+#include <optier/FrameProcessorPipeline.h>
 
 namespace optier
 {
@@ -13,7 +14,9 @@ namespace optier
     {
     public:
 
-        explicit ConsumerThread(FrameQueue& queue);
+        ConsumerThread(
+            FrameQueue& queue,
+            FrameProcessorPipeline& pipeline);
 
         ~ConsumerThread();
 
@@ -40,6 +43,8 @@ namespace optier
     private:
 
         FrameQueue& m_queue;
+
+        FrameProcessorPipeline& m_pipeline;
 
         std::thread m_thread;
 

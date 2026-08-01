@@ -1,16 +1,16 @@
 #pragma once
 
-#include <cstdint>
 #include <chrono>
+#include <cstdint>
+#include <memory>
 
+#include <opencv2/core/mat.hpp>
 
 namespace optier
 {
 
     struct VideoFrame
     {
-       
-
         std::uint32_t Width = 0;
 
         std::uint32_t Height = 0;
@@ -19,7 +19,7 @@ namespace optier
 
         std::chrono::steady_clock::time_point Timestamp;
 
-		void* NativeFrame = nullptr;
+        std::shared_ptr<cv::Mat> Image;
     };
 
 }
