@@ -154,6 +154,8 @@
     <ClInclude Include="include\optier\Device.h" />
     <ClInclude Include="include\optier\DeviceInfo.h" />
     <ClInclude Include="include\optier\DeviceManager.h" />
+    <ClInclude Include="include\optier\FrameProcessorPipeline.h" />
+    <ClInclude Include="include\optier\IFrameProcessor.h" />
     <ClInclude Include="include\optier\IRTSPClient.h" />
     <ClInclude Include="include\optier\NVR.h" />
     <ClInclude Include="include\optier\NVRInfo.h" />
@@ -180,6 +182,7 @@
     <ClCompile Include="src\DeviceManager.cpp" />
     <ClCompile Include="src\NVR.cpp" />
     <ClCompile Include="src\ConsumerThread.cpp" />
+    <ClCompile Include="src\FrameProcessorPipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.vcxproj">
