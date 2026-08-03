@@ -143,6 +143,7 @@
     <ClInclude Include="include\optier\AICapability.h" />
     <ClInclude Include="include\optier\Application.h" />
     <ClInclude Include="include\optier\ApplicationContext.h" />
+    <ClInclude Include="include\optier\BoundingBox.h" />
     <ClInclude Include="include\optier\Camera.h" />
     <ClInclude Include="include\optier\CameraInfo.h" />
     <ClInclude Include="include\optier\CameraStatus.h" />

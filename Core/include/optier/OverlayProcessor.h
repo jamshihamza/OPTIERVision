@@ -1,10 +1,12 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include <opencv2/core/types.hpp>
 #include <optier/IFrameProcessor.h>
 
+#include <optier/BoundingBox.h>
 
 namespace optier
 {
@@ -67,6 +69,14 @@ private:
         int radius,
         const cv::Scalar& color,
         int thickness = 2);
+    
+     void DrawBoundingBox(
+        VideoFrame& frame,
+		 const BoundingBox& box);
+
+     void DrawBoundingBoxes(
+         VideoFrame& frame,
+         const std::vector<BoundingBox>& boxes);
 
 private:
 

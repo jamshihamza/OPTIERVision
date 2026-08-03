@@ -41,7 +41,64 @@ namespace optier
 
 		DrawFPS(frame);
 
-        return true;
+        //
+        // Demo detections
+        //
+        std::vector<BoundingBox> detections;
+       
+		//demo detection: car
+        BoundingBox car;
+
+        car.X = 200;
+        car.Y = 120;
+        car.Width = 260;
+        car.Height = 180;
+
+        car.Label = "Car";
+        car.Confidence = 0.98f;
+
+        car.Color =
+            cv::Scalar(0, 255, 0);
+
+        detections.push_back(car);
+
+		//demo detection: person
+        BoundingBox person;
+
+        person.X = 520;
+        person.Y = 180;
+        person.Width = 90;
+        person.Height = 220;
+
+        person.Label = "Person";
+        person.Confidence = 0.95f;
+
+        person.Color =
+            cv::Scalar(255, 0, 0);
+
+        detections.push_back(person);
+
+		//demo detection: Motorcycle
+        BoundingBox motorcycle;
+
+        motorcycle.X = 900;
+        motorcycle.Y = 260;
+        motorcycle.Width = 180;
+        motorcycle.Height = 120;
+
+        motorcycle.Label = "Motorcycle";
+        motorcycle.Confidence = 0.91f;
+
+        motorcycle.Color =
+            cv::Scalar(0, 255, 255);
+
+        detections.push_back(motorcycle);
+
+        DrawBoundingBoxes(
+            frame,
+			detections);
+
+		return true;
     }
 
     void OverlayProcessor::DrawApplicationName(
@@ -188,6 +245,59 @@ namespace optier
             color,
             thickness,
             cv::LINE_AA);
+    }
+
+    void OverlayProcessor::DrawBoundingBox(
+        VideoFrame& frame,
+        const BoundingBox& box)
+    {
+        //
+        // Draw the bounding rectangle
+        //
+        DrawRectangle(
+            frame,
+            box.X,
+            box.Y,
+            box.Width,
+            box.Height,
+            box.Color,
+            2);
+
+        //
+        // Build label text
+        //
+        std::ostringstream stream;
+
+        stream
+            << box.Label
+            << " ("
+            << std::fixed
+            << std::setprecision(1)
+            << (box.Confidence * 100.0f)
+            << "%)";
+
+        //
+        // Draw label above the box
+        //
+        DrawText(
+            frame,
+            stream.str(),
+            box.X,
+            box.Y - 10,
+            0.6,
+            2);
+    }
+
+    void OverlayProcessor::DrawBoundingBoxes(
+        VideoFrame& frame,
+        const std::vector<BoundingBox>& boxes)
+    {
+        for (const auto& box : boxes)
+        {
+            DrawBoundingBox(
+                frame,
+                box);
+        }
     }
 
 } // namespace optier
