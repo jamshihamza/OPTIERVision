@@ -109,7 +109,7 @@ namespace optier
         DrawText(
             frame,
             m_applicationName,
-            20,
+            2500,
             40);
     }
 
@@ -120,8 +120,8 @@ namespace optier
             frame,
             "Frame : " +
             std::to_string(frame.FrameNumber),
-            20,
-            75,
+            2500,
+            80,
             0.7,
             2);
     }
@@ -169,7 +169,7 @@ namespace optier
         DrawText(
             frame,
             "FPS : " + stream.str(),
-            20,
+            2500,
             105,
             0.7,
             2);

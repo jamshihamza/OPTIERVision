@@ -152,11 +152,16 @@
     <ClInclude Include="include\optier\ConfigurationManager.h" />
     <ClInclude Include="include\optier\ConnectionState.h" />
     <ClInclude Include="include\optier\ConsumerThread.h" />
+    <ClInclude Include="include\optier\DetectionCollection.h" />
+    <ClInclude Include="include\optier\DetectionMapper.h" />
+    <ClInclude Include="include\optier\DetectionResult.h" />
     <ClInclude Include="include\optier\Device.h" />
     <ClInclude Include="include\optier\DeviceInfo.h" />
     <ClInclude Include="include\optier\DeviceManager.h" />
+    <ClInclude Include="include\optier\DummyDetector.h" />
     <ClInclude Include="include\optier\FrameProcessorPipeline.h" />
     <ClInclude Include="include\optier\FrameStatistics.h" />
+    <ClInclude Include="include\optier\IObjectDetector.h" />
     <ClInclude Include="include\optier\OverlayProcessor.h" />
     <ClInclude Include="include\optier\PerformanceMonitorProcessor.h" />
     <ClInclude Include="include\optier\SnapshotProcessor.h" />
@@ -184,8 +189,10 @@
     <ClCompile Include="src\CaptureThread.cpp" />
     <ClCompile Include="src\Configuration.cpp" />
     <ClCompile Include="src\ConfigurationManager.cpp" />
+    <ClCompile Include="src\DetectionMapper.cpp" />
     <ClCompile Include="src\Device.cpp" />
     <ClCompile Include="src\DeviceManager.cpp" />
+    <ClCompile Include="src\DummyDetector.cpp" />
     <ClCompile Include="src\NVR.cpp" />
     <ClCompile Include="src\ConsumerThread.cpp" />
     <ClCompile Include="src\FrameProcessorPipeline.cpp" />
