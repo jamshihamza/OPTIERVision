@@ -155,6 +155,8 @@
     <ClInclude Include="include\optier\DeviceInfo.h" />
     <ClInclude Include="include\optier\DeviceManager.h" />
     <ClInclude Include="include\optier\FrameProcessorPipeline.h" />
+    <ClInclude Include="include\optier\FrameStatistics.h" />
+    <ClInclude Include="include\optier\PerformanceMonitorProcessor.h" />
     <ClInclude Include="include\optier\SnapshotProcessor.h" />
     <ClInclude Include="include\optier\VideoRenderer.h" />
     <ClInclude Include="include\optier\IFrameProcessor.h" />
@@ -186,6 +188,7 @@
     <ClCompile Include="src\ConsumerThread.cpp" />
     <ClCompile Include="src\FrameProcessorPipeline.cpp" />
     <ClCompile Include="src\SnapshotProcessor.cpp" />
+    <ClCompile Include="src\PerformanceMonitorProcessor.cpp" />
     <ClCompile Include="src\VideoRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>

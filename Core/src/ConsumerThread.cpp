@@ -1,6 +1,9 @@
 #include "pch.h"
+
 #include <optier/ConsumerThread.h>
-#include <iostream>
+
+#include <chrono>
+#include <thread>
 
 namespace optier
 {
@@ -27,7 +30,10 @@ namespace optier
 
         m_running.store(true);
 
-        m_thread = std::thread(&ConsumerThread::Run, this);
+        m_thread =
+            std::thread(
+                &ConsumerThread::Run,
+                this);
 
         return true;
     }
@@ -65,19 +71,56 @@ namespace optier
         {
             VideoFrame frame;
 
+            //
+            // Wait for next frame
+            //
             if (!m_queue.WaitAndPop(frame))
             {
                 break;
             }
-          
 
-            bool ok = m_pipeline.ProcessFrame(frame);
+            //
+            // Processing starts
+            //
+            frame.Statistics.ProcessingStartTime =
+                std::chrono::steady_clock::now();
 
+            //
+            // Execute the frame processing pipeline
+            //
+            bool ok =
+                m_pipeline.ProcessFrame(frame);
+
+            //
+            // Processing ends
+            //
+            frame.Statistics.ProcessingEndTime =
+                std::chrono::steady_clock::now();
+
+            //
+            // Calculate processing duration
+            //
+            frame.Statistics.ProcessingDuration =
+                std::chrono::duration_cast<std::chrono::microseconds>(
+                    frame.Statistics.ProcessingEndTime -
+                    frame.Statistics.ProcessingStartTime);
+
+            //
+            // Run diagnostics AFTER timing has been calculated.
+            //
+            m_performanceMonitor.ProcessFrame(frame);
+
+            //
+            // Skip failed frames
+            //
             if (!ok)
             {
                 continue;
             }
-      
+
+            //
+            // Statistics
+            //
             ++m_processedFrames;
         }
     }

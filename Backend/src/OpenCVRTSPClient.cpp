@@ -115,6 +115,7 @@ namespace optier
 
         frame.Timestamp =
             std::chrono::steady_clock::now();
+        frame.Statistics.CaptureTime = frame.Timestamp;
 
         frame.Image =
             std::make_shared<cv::Mat>(

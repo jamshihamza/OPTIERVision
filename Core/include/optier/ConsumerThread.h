@@ -6,6 +6,7 @@
 
 #include <optier/FrameQueue.h>
 #include <optier/FrameProcessorPipeline.h>
+#include <optier/PerformanceMonitorProcessor.h>
 
 namespace optier
 {
@@ -20,13 +21,11 @@ namespace optier
 
         ~ConsumerThread();
 
-        ConsumerThread(const ConsumerThread&) = delete;
-        ConsumerThread& operator=(const ConsumerThread&) = delete;
+        ConsumerThread(
+            const ConsumerThread&) = delete;
 
-        ConsumerThread(ConsumerThread&&) = delete;
-        ConsumerThread& operator=(ConsumerThread&&) = delete;
-
-    public:
+        ConsumerThread& operator=(
+            const ConsumerThread&) = delete;
 
         bool Start();
 
@@ -42,14 +41,31 @@ namespace optier
 
     private:
 
+        //
+        // Shared objects
+        //
         FrameQueue& m_queue;
 
         FrameProcessorPipeline& m_pipeline;
 
+        //
+        // Diagnostics
+        //
+        PerformanceMonitorProcessor m_performanceMonitor;
+
+        //
+        // Worker thread
+        //
         std::thread m_thread;
 
+        //
+        // Thread state
+        //
         std::atomic<bool> m_running{ false };
 
+        //
+        // Statistics
+        //
         std::atomic<std::uint64_t> m_processedFrames{ 0 };
     };
 

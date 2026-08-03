@@ -12,6 +12,7 @@
 #include <optier/FrameProcessorPipeline.h>
 #include <optier/VideoRenderer.h>
 #include <optier/SnapshotProcessor.h>
+#include <optier/PerformanceMonitorProcessor.h>
 
 using namespace optier;
 
@@ -42,11 +43,15 @@ int main()
 
     auto renderer =
         std::make_shared<VideoRenderer>("OPTIER Vision");
+    auto PerformanceMonitor =
+		std::make_shared<PerformanceMonitorProcessor>();
     auto snapshotProcessor =
 		std::make_shared<SnapshotProcessor>("snapshots");
 
-    pipeline.AddProcessor(renderer);
+    //FrameProcessorPipelines
 
+	
+    pipeline.AddProcessor(renderer);
 	pipeline.AddProcessor(snapshotProcessor);
 
     CaptureThread capture(client, queue);
