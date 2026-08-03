@@ -17,3 +17,6 @@ obj/
 CMakeSettings.json
 # OpenCV
 libraries/opencv/
+
+# Runtime snapshots
+snapshots/*.jpg

@@ -13,6 +13,7 @@
 #include <optier/VideoRenderer.h>
 #include <optier/SnapshotProcessor.h>
 #include <optier/PerformanceMonitorProcessor.h>
+#include <optier/OverlayProcessor.h>
 
 using namespace optier;
 
@@ -41,6 +42,8 @@ int main()
 
     FrameProcessorPipeline pipeline;
 
+    auto overlayProcessor =
+		std::make_shared<OverlayProcessor>("OPTIER Vision");
     auto renderer =
         std::make_shared<VideoRenderer>("OPTIER Vision");
     auto PerformanceMonitor =
@@ -50,7 +53,7 @@ int main()
 
     //FrameProcessorPipelines
 
-	
+	pipeline.AddProcessor(overlayProcessor);
     pipeline.AddProcessor(renderer);
 	pipeline.AddProcessor(snapshotProcessor);
 
