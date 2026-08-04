@@ -105,10 +105,7 @@ namespace optier
                     frame.Statistics.ProcessingEndTime -
                     frame.Statistics.ProcessingStartTime);
 
-            //
-            // Run diagnostics AFTER timing has been calculated.
-            //
-            m_performanceMonitor.ProcessFrame(frame);
+     
 
             //
             // Skip failed frames

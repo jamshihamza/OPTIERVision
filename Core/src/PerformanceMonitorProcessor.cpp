@@ -10,6 +10,11 @@ namespace optier
     bool PerformanceMonitorProcessor::ProcessFrame(
         VideoFrame& frame)
     {
+
+        std::cout
+            << "[PerformanceMonitor] this="
+            << this
+            << '\n';
         //
         // Convert processing time to microseconds
         //

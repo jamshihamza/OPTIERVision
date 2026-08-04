@@ -48,11 +48,7 @@ namespace optier
 
         FrameProcessorPipeline& m_pipeline;
 
-        //
-        // Diagnostics
-        //
-        PerformanceMonitorProcessor m_performanceMonitor;
-
+       
         //
         // Worker thread
         //
