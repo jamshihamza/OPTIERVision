@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+
 #include <iomanip>
 #include <sstream>
 
@@ -9,12 +10,6 @@
 
 namespace optier
 {
-
-    OverlayProcessor::OverlayProcessor(
-        std::string applicationName)
-        : m_applicationName(std::move(applicationName))
-    {
-    }
 
     bool OverlayProcessor::ProcessFrame(
         VideoFrame& frame)
@@ -33,84 +28,33 @@ namespace optier
         }
 
         //
-        // Draw overlays
+        // Draw overlay information
         //
         DrawApplicationName(frame);
 
-		DrawFrameNumber(frame);
+        DrawFrameNumber(frame);
 
-		DrawFPS(frame);
+        DrawFPS(frame);
 
         //
-        // Demo detections
+        // Draw AI bounding boxes
         //
-        std::vector<BoundingBox> detections;
-       
-		//demo detection: car
-        BoundingBox car;
-
-        car.X = 200;
-        car.Y = 120;
-        car.Width = 260;
-        car.Height = 180;
-
-        car.Label = "Car";
-        car.Confidence = 0.98f;
-
-        car.Color =
-            cv::Scalar(0, 255, 0);
-
-        detections.push_back(car);
-
-		//demo detection: person
-        BoundingBox person;
-
-        person.X = 520;
-        person.Y = 180;
-        person.Width = 90;
-        person.Height = 220;
-
-        person.Label = "Person";
-        person.Confidence = 0.95f;
-
-        person.Color =
-            cv::Scalar(255, 0, 0);
-
-        detections.push_back(person);
-
-		//demo detection: Motorcycle
-        BoundingBox motorcycle;
-
-        motorcycle.X = 900;
-        motorcycle.Y = 260;
-        motorcycle.Width = 180;
-        motorcycle.Height = 120;
-
-        motorcycle.Label = "Motorcycle";
-        motorcycle.Confidence = 0.91f;
-
-        motorcycle.Color =
-            cv::Scalar(0, 255, 255);
-
-        detections.push_back(motorcycle);
-
         DrawBoundingBoxes(
             frame,
-			detections);
+            frame.BoundingBoxes);
 
-		return true;
+        return true;
     }
-
     void OverlayProcessor::DrawApplicationName(
         VideoFrame& frame)
-
-
     {
         DrawText(
             frame,
-            m_applicationName,
-            2500,
-            40);
+            "OPTIER Vision",
+            20,
+            40,
+            0.9,
+            2);
     }
 
     void OverlayProcessor::DrawFrameNumber(
@@ -120,8 +64,8 @@ namespace optier
             frame,
             "Frame : " +
             std::to_string(frame.FrameNumber),
-            2500,
-            80,
+            20,
+            75,
             0.7,
             2);
     }
@@ -156,9 +100,6 @@ namespace optier
             m_fpsStart = now;
         }
 
-        //
-        // Format FPS text
-        //
         std::ostringstream stream;
 
         stream
@@ -169,13 +110,11 @@ namespace optier
         DrawText(
             frame,
             "FPS : " + stream.str(),
-            2500,
+            20,
             105,
             0.7,
             2);
     }
-
-
     void OverlayProcessor::DrawText(
         VideoFrame& frame,
         const std::string& text,
@@ -252,7 +191,7 @@ namespace optier
         const BoundingBox& box)
     {
         //
-        // Draw the bounding rectangle
+        // Draw bounding rectangle
         //
         DrawRectangle(
             frame,

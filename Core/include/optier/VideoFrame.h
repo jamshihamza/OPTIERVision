@@ -3,9 +3,12 @@
 #include <chrono>
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 #include <opencv2/core/mat.hpp>
 
+#include <optier/BoundingBox.h>
+#include <optier/DetectionCollection.h>
 #include <optier/FrameStatistics.h>
 
 namespace optier
@@ -33,6 +36,16 @@ namespace optier
         // Runtime Statistics
         //
         FrameStatistics Statistics;
+
+        //
+        // AI Detection Results
+        //
+        DetectionCollection Detections;
+
+        //
+        // Rendering Data
+        //
+        std::vector<BoundingBox> BoundingBoxes;
     };
 
-}
+} // namespace optier

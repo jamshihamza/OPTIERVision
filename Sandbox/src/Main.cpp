@@ -6,14 +6,19 @@
 #include <thread>
 
 #include <optier/OpenCVRTSPClient.h>
-#include <optier/FrameQueue.h>
+
+#include <optier/AIProcessor.h>
 #include <optier/CaptureThread.h>
 #include <optier/ConsumerThread.h>
+#include <optier/DetectionMapperProcessor.h>
+#include <optier/DummyDetector.h>
 #include <optier/FrameProcessorPipeline.h>
-#include <optier/VideoRenderer.h>
-#include <optier/SnapshotProcessor.h>
-#include <optier/PerformanceMonitorProcessor.h>
+#include <optier/FrameQueue.h>
+#include <optier/OpenCVRTSPClient.h>
 #include <optier/OverlayProcessor.h>
+#include <optier/PerformanceMonitorProcessor.h>
+#include <optier/SnapshotProcessor.h>
+#include <optier/VideoRenderer.h>
 
 using namespace optier;
 
@@ -42,22 +47,56 @@ int main()
 
     FrameProcessorPipeline pipeline;
 
+    //
+    // Create processors
+    //
+    auto aiProcessor =
+        std::make_shared<AIProcessor>(
+            std::make_unique<DummyDetector>());
+
+    auto detectionMapperProcessor =
+        std::make_shared<DetectionMapperProcessor>();
+
     auto overlayProcessor =
-		std::make_shared<OverlayProcessor>("OPTIER Vision");
+        std::make_shared<OverlayProcessor>();
+
     auto renderer =
-        std::make_shared<VideoRenderer>("OPTIER Vision");
-    auto PerformanceMonitor =
-		std::make_shared<PerformanceMonitorProcessor>();
+        std::make_shared<VideoRenderer>(
+            "OPTIER Vision");
+
     auto snapshotProcessor =
-		std::make_shared<SnapshotProcessor>("snapshots");
+        std::make_shared<SnapshotProcessor>(
+            "snapshots");
 
-    //FrameProcessorPipelines
+    auto performanceProcessor =
+        std::make_shared<PerformanceMonitorProcessor>();
 
-	pipeline.AddProcessor(overlayProcessor);
-    pipeline.AddProcessor(renderer);
-	pipeline.AddProcessor(snapshotProcessor);
+    //
+    // Register processors
+    //
+    pipeline.AddProcessor(aiProcessor);
 
-    CaptureThread capture(client, queue);
+    pipeline.AddProcessor(
+        detectionMapperProcessor);
+
+    pipeline.AddProcessor(
+        overlayProcessor);
+
+    pipeline.AddProcessor(
+        renderer);
+
+    pipeline.AddProcessor(
+        snapshotProcessor);
+
+    pipeline.AddProcessor(
+        performanceProcessor);
+
+    //
+    // Threads
+    //
+    CaptureThread capture(
+        client,
+        queue);
 
     ConsumerThread consumer(
         queue,
@@ -103,7 +142,8 @@ int main()
         << consumer.ProcessedFrames()
         << "\n";
 
-    std::cout << "\nPipeline stopped successfully.\n";
+    std::cout
+        << "\nPipeline stopped successfully.\n";
 
     return 0;
 }
