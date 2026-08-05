@@ -25,13 +25,22 @@ namespace optier
         }
 
         //
-        // Run AI detection and store results
-        // directly inside the frame.
+        // Validate frame
         //
-        frame.Detections =
-            m_detector->Detect(frame);
+        if (!frame.Image)
+        {
+            return false;
+        }
 
-        return true;
+        if (frame.Image->empty())
+        {
+            return false;
+        }
+
+        //
+        // Detector populates frame.Detections.
+        //
+        return m_detector->Detect(frame);
     }
 
 } // namespace optier

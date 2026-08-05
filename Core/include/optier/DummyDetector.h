@@ -10,8 +10,14 @@ namespace optier
     {
     public:
 
-        DetectionCollection Detect(
-            const VideoFrame& frame) override;
+        DummyDetector() = default;
+
+        bool Initialize() override;
+
+        void Shutdown() override;
+
+        bool Detect(
+            VideoFrame& frame) override;
     };
 
 } // namespace optier

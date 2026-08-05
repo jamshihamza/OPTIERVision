@@ -20,3 +20,13 @@ libraries/opencv/
 
 # Runtime snapshots
 snapshots/*.jpg
+# ONNX Runtime binaries
+libraries/onnxruntime/lib/
+
+# Optional: keep the downloaded package out of Git
+# libraries/onnxruntime/
+
+# Models (choose based on your preference)
+# libraries/models/
+
+*.pdb

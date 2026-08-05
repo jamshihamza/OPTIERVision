@@ -79,7 +79,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)Common\include;$(SolutionDir)Core\include;$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libraries\onnxruntime\include;$(ProjectDir);$(ProjectDir)include;$(SolutionDir)Common\include;$(SolutionDir)Core\include;$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -97,7 +97,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)Common\include;$(SolutionDir)Core\include;$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libraries\onnxruntime\include;$(ProjectDir);$(ProjectDir)include;$(SolutionDir)Common\include;$(SolutionDir)Core\include;$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -114,7 +114,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)Common\include;$(SolutionDir)Core\include;$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libraries\onnxruntime\include;$(ProjectDir);$(ProjectDir)include;$(SolutionDir)Common\include;$(SolutionDir)Core\include;$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -132,7 +132,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)Common\include;$(SolutionDir)Core\include;$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libraries\onnxruntime\include;$(ProjectDir);$(ProjectDir)include;$(SolutionDir)Common\include;$(SolutionDir)Core\include;$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -159,6 +159,14 @@
     <ClCompile Include="src\ImagePreprocessor.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
     <ClCompile Include="src\YOLODetector.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.vcxproj">
+      <Project>{2a933d56-b2d6-4ea6-b94a-37f65b898f62}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Core.vcxproj">
+      <Project>{5bb58aa2-e0dc-4388-becd-d0c163f67a21}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

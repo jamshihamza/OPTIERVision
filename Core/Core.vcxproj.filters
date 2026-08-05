@@ -126,6 +126,9 @@
     <ClInclude Include="include\optier\DetectionMapperProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\optier\YOLODetectorProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -189,6 +192,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\DetectionMapperProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\YOLODetectorProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

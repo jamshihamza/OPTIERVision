@@ -82,6 +82,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)AIEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -99,6 +100,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)AIEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -114,6 +116,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)AIEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -131,6 +134,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)AIEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -163,6 +167,7 @@
     <ClInclude Include="include\optier\DummyDetector.h" />
     <ClInclude Include="include\optier\FrameProcessorPipeline.h" />
     <ClInclude Include="include\optier\FrameStatistics.h" />
+    <ClInclude Include="include\optier\YOLODetectorProcessor.h" />
     <ClInclude Include="include\optier\IObjectDetector.h" />
     <ClInclude Include="include\optier\OverlayProcessor.h" />
     <ClInclude Include="include\optier\PerformanceMonitorProcessor.h" />
@@ -204,6 +209,7 @@
     <ClCompile Include="src\SnapshotProcessor.cpp" />
     <ClCompile Include="src\PerformanceMonitorProcessor.cpp" />
     <ClCompile Include="src\VideoRenderer.cpp" />
+    <ClCompile Include="src\YOLODetectorProcessor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.vcxproj">

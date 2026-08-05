@@ -5,56 +5,87 @@
 #include <memory>
 #include <thread>
 
-#include <optier/OpenCVRTSPClient.h>
+#include <optier/ModelLoader.h>
 
-#include <optier/AIProcessor.h>
+#include <optier/OpenCVRTSPClient.h>
+#include <optier/FrameQueue.h>
 #include <optier/CaptureThread.h>
 #include <optier/ConsumerThread.h>
-#include <optier/DetectionMapperProcessor.h>
-#include <optier/DummyDetector.h>
 #include <optier/FrameProcessorPipeline.h>
-#include <optier/FrameQueue.h>
-#include <optier/OpenCVRTSPClient.h>
-#include <optier/OverlayProcessor.h>
-#include <optier/PerformanceMonitorProcessor.h>
-#include <optier/SnapshotProcessor.h>
+
 #include <optier/VideoRenderer.h>
+#include <optier/SnapshotProcessor.h>
+#include <optier/OverlayProcessor.h>
+#include <optier/DetectionMapperProcessor.h>
 
 using namespace optier;
 
 int main()
 {
     std::cout << "========================================\n";
-    std::cout << " OPTIER Vision Pipeline Test\n";
+    std::cout << " OPTIER Vision\n";
     std::cout << "========================================\n\n";
 
+    //
+    // -------------------------------------------------
+    // Test ONNX Runtime
+    // -------------------------------------------------
+    //
+    std::cout << "Loading YOLO model...\n";
+
+    ModelLoader loader(
+        "libraries/models/yolov8n.onnx");
+
+    if (!loader.Load())
+    {
+        std::cout
+            << "ERROR : Failed to load ONNX model.\n";
+
+        return -1;
+    }
+
+    loader.PrintModelInfo();
+
+    std::cout << "\n";
+    std::cout << "ONNX Runtime initialized successfully.\n\n";
+
+    //
+    // -------------------------------------------------
+    // RTSP Client
+    // -------------------------------------------------
+    //
     OpenCVRTSPClient client;
 
     const std::string rtspUrl =
         "rtsp://admin:Opt$0987@192.168.1.100:80/rtsp/streaming?channel=09&subtype=0";
 
-    std::cout << "Connecting...\n";
+    std::cout << "Connecting to RTSP stream...\n";
 
     if (!client.Connect(rtspUrl))
     {
-        std::cout << "Failed to connect to RTSP stream.\n";
+        std::cout
+            << "Failed to connect to RTSP stream.\n";
+
         return -1;
     }
 
     std::cout << "Connected successfully.\n";
 
+    //
+    // -------------------------------------------------
+    // Frame Queue
+    // -------------------------------------------------
+    //
     FrameQueue queue(30);
 
+    //
+    // -------------------------------------------------
+    // Processing Pipeline
+    // -------------------------------------------------
+    //
     FrameProcessorPipeline pipeline;
 
-    //
-    // Create processors
-    //
-    auto aiProcessor =
-        std::make_shared<AIProcessor>(
-            std::make_unique<DummyDetector>());
-
-    auto detectionMapperProcessor =
+    auto detectionMapper =
         std::make_shared<DetectionMapperProcessor>();
 
     auto overlayProcessor =
@@ -68,31 +99,15 @@ int main()
         std::make_shared<SnapshotProcessor>(
             "snapshots");
 
-    auto performanceProcessor =
-        std::make_shared<PerformanceMonitorProcessor>();
+    pipeline.AddProcessor(detectionMapper);
+    pipeline.AddProcessor(overlayProcessor);
+    pipeline.AddProcessor(renderer);
+    pipeline.AddProcessor(snapshotProcessor);
 
     //
-    // Register processors
-    //
-    pipeline.AddProcessor(aiProcessor);
-
-    pipeline.AddProcessor(
-        detectionMapperProcessor);
-
-    pipeline.AddProcessor(
-        overlayProcessor);
-
-    pipeline.AddProcessor(
-        renderer);
-
-    pipeline.AddProcessor(
-        snapshotProcessor);
-
-    pipeline.AddProcessor(
-        performanceProcessor);
-
-    //
+    // -------------------------------------------------
     // Threads
+    // -------------------------------------------------
     //
     CaptureThread capture(
         client,
@@ -124,26 +139,28 @@ int main()
             std::chrono::milliseconds(1));
     }
 
+    //
+    // -------------------------------------------------
+    // Shutdown
+    // -------------------------------------------------
+    //
     std::cout << "\nStopping...\n";
 
-    std::cout << "Stopping Capture...\n";
     capture.Stop();
 
-    std::cout << "Stopping Consumer...\n";
     consumer.Stop();
 
-    std::cout << "Disconnecting...\n";
     client.Disconnect();
 
-    std::cout << "Done.\n";
+    loader.Unload();
 
+    std::cout << "\n";
     std::cout
         << "Processed Frames : "
         << consumer.ProcessedFrames()
         << "\n";
 
-    std::cout
-        << "\nPipeline stopped successfully.\n";
+    std::cout << "\nPipeline stopped successfully.\n";
 
     return 0;
 }

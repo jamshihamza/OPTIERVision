@@ -74,6 +74,18 @@
     <Import Project="..\build\props\Optier.Paths.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(SolutionDir)AIEngine\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)AIEngine\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)AIEngine\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)AIEngine\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -82,13 +94,13 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libraries\onnxruntime\include;$(SolutionDir)Backend\include;$(SolutionDir)Core\include;$(SolutionDir)AIEngine\include;$(SolutionDir)libraries\opencv\build\include;$(SolutionDir)Common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)libraries\opencv\build\x64\vc16\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world500d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\onnxruntime\lib;$(SolutionDir)libraries\opencv\build\x64\vc16\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_world500d.lib;$(CoreLibraryDependencies);onnxruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -101,13 +113,13 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libraries\onnxruntime\include;$(SolutionDir)Backend\include;$(SolutionDir)Core\include;$(SolutionDir)AIEngine\include;$(SolutionDir)libraries\opencv\build\include;$(SolutionDir)Common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)libraries\opencv\build\x64\vc16\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world500d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\onnxruntime\lib;$(SolutionDir)libraries\opencv\build\x64\vc16\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_world500d.lib;$(CoreLibraryDependencies);onnxruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -118,13 +130,13 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libraries\onnxruntime\include;$(SolutionDir)Backend\include;$(SolutionDir)Core\include;$(SolutionDir)AIEngine\include;$(SolutionDir)libraries\opencv\build\include;$(SolutionDir)Common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)libraries\opencv\build\x64\vc16\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world500d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\onnxruntime\lib;$(SolutionDir)libraries\opencv\build\x64\vc16\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_world500d.lib;$(CoreLibraryDependencies);onnxruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,13 +149,13 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)libraries\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libraries\onnxruntime\include;$(SolutionDir)Backend\include;$(SolutionDir)Core\include;$(SolutionDir)AIEngine\include;$(SolutionDir)libraries\opencv\build\include;$(SolutionDir)Common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)libraries\opencv\build\x64\vc16\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world500d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\onnxruntime\lib;$(SolutionDir)libraries\opencv\build\x64\vc16\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_world500d.lib;$(CoreLibraryDependencies);onnxruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -156,6 +168,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AIEngine\AIEngine.vcxproj">
+      <Project>{9de5923b-cefd-4996-871e-d213ee832a18}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Backend\Backend.vcxproj">
       <Project>{b77329a0-2e29-40a5-a094-1330692b2c7c}</Project>
     </ProjectReference>
