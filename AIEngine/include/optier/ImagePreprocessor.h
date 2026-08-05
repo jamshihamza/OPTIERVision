@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include <opencv2/core/mat.hpp>
 
 namespace optier
@@ -11,17 +13,26 @@ namespace optier
 
         ImagePreprocessor() = default;
 
-        ~ImagePreprocessor() = default;
-
         bool Preprocess(
-            const cv::Mat& input,
-            cv::Mat& output);
+            const cv::Mat& inputImage,
+            std::vector<float>& outputTensor);
 
     private:
 
-        static constexpr int TargetWidth = 640;
+        cv::Mat LetterboxResize(
+            const cv::Mat& image,
+            int targetWidth = 640,
+            int targetHeight = 640);
 
-        static constexpr int TargetHeight = 640;
+        cv::Mat ConvertToRGB(
+            const cv::Mat& image);
+
+        cv::Mat ConvertToFloat(
+            const cv::Mat& image);
+
+        void ConvertToTensor(
+            const cv::Mat& image,
+            std::vector<float>& tensor);
     };
 
 } // namespace optier
