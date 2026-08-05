@@ -40,7 +40,7 @@ namespace optier
             // Default rendering color
             //
             box.Color =
-                cv::Scalar(0, 255, 0);
+                cv::Scalar(0, 255, 255);
 
             boxes.push_back(
                 std::move(box));

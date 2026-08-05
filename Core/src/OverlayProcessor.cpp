@@ -45,6 +45,7 @@ namespace optier
 
         return true;
     }
+
     void OverlayProcessor::DrawApplicationName(
         VideoFrame& frame)
     {
@@ -115,6 +116,7 @@ namespace optier
             0.7,
             2);
     }
+
     void OverlayProcessor::DrawText(
         VideoFrame& frame,
         const std::string& text,
@@ -129,7 +131,7 @@ namespace optier
             cv::Point(x, y),
             cv::FONT_HERSHEY_SIMPLEX,
             scale,
-            cv::Scalar(0, 255, 0),
+            cv::Scalar(255, 255, 255),   // White
             thickness,
             cv::LINE_AA);
     }
@@ -145,7 +147,11 @@ namespace optier
     {
         cv::rectangle(
             *frame.Image,
-            cv::Rect(x, y, width, height),
+            cv::Rect(
+                x,
+                y,
+                width,
+                height),
             color,
             thickness,
             cv::LINE_AA);
@@ -191,7 +197,7 @@ namespace optier
         const BoundingBox& box)
     {
         //
-        // Draw bounding rectangle
+        // Draw bounding rectangle.
         //
         DrawRectangle(
             frame,
@@ -203,28 +209,69 @@ namespace optier
             2);
 
         //
-        // Build label text
+        // Build label text.
         //
         std::ostringstream stream;
 
         stream
             << box.Label
-            << " ("
+            << " "
             << std::fixed
             << std::setprecision(1)
             << (box.Confidence * 100.0f)
-            << "%)";
+            << "%";
+
+        const std::string label =
+            stream.str();
 
         //
-        // Draw label above the box
+        // Measure text size.
         //
-        DrawText(
-            frame,
-            stream.str(),
-            box.X,
-            box.Y - 10,
+        int baseline = 0;
+
+        cv::Size textSize =
+            cv::getTextSize(
+                label,
+                cv::FONT_HERSHEY_SIMPLEX,
+                0.6,
+                2,
+                &baseline);
+
+        //
+        // Label rectangle.
+        //
+        int labelX =
+            box.X;
+
+        int labelY =
+            std::max(
+                0,
+                box.Y - textSize.height - 8);
+
+        cv::rectangle(
+            *frame.Image,
+            cv::Rect(
+                labelX,
+                labelY,
+                textSize.width + 10,
+                textSize.height + 8),
+            box.Color,
+            cv::FILLED);
+
+        //
+        // Draw Black  text.
+        //
+        cv::putText(
+            *frame.Image,
+            label,
+            cv::Point(
+                labelX + 5,
+                labelY + textSize.height + 1),
+            cv::FONT_HERSHEY_SIMPLEX,
             0.6,
-            2);
+            cv::Scalar(0, 0, 0),
+            2,
+            cv::LINE_AA);
     }
 
     void OverlayProcessor::DrawBoundingBoxes(
