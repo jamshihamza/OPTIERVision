@@ -22,10 +22,10 @@ namespace optier
     bool SnapshotProcessor::ProcessFrame(
         VideoFrame& frame)
     {
-        std::cout
+      /*  std::cout
             << "[SnapshotProcessor] this=" << this
             << " frame=" << frame.FrameNumber
-            << std::endl;
+            << std::endl;*/
 
         if (!frame.Image)
         {

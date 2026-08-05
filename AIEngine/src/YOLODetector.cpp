@@ -43,7 +43,7 @@ namespace optier
         std::vector<float> inputTensor;
 
         if (!m_preprocessor.Preprocess(
-            *frame.Image,
+            frame,
             inputTensor))
         {
             return false;
@@ -66,7 +66,7 @@ namespace optier
         //
         if (!m_postProcessor.Process(
             outputTensor,
-            frame.Detections))
+            frame))
         {
             return false;
         }

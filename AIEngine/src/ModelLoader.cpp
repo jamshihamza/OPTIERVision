@@ -213,7 +213,7 @@ namespace optier
             return false;
         }
 
-        std::cout << "\n========================================\n";
+       /* std::cout << "\n========================================\n";
         std::cout << "ONNX OUTPUT INFORMATION\n";
         std::cout << "========================================\n";
 
@@ -246,7 +246,7 @@ namespace optier
                 << "Elements : "
                 << tensorInfo.GetElementCount()
                 << "\n\n";
-        }
+        }*/
 
         auto tensorInfo =
             outputs[0].GetTensorTypeAndShapeInfo();

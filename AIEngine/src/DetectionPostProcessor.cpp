@@ -12,8 +12,10 @@ namespace optier
 
     bool DetectionPostProcessor::Process(
         const std::vector<float>& outputTensor,
-        DetectionCollection& detections)
+        VideoFrame& frame)
     {
+        DetectionCollection& detections =
+            frame.Detections;
         detections.Results.clear();
 
         if (outputTensor.empty())
@@ -31,7 +33,7 @@ namespace optier
             return false;
         }
 
-        constexpr float ConfidenceThreshold = 0.25f;
+     
 
         //
         // Tensor Layout
@@ -122,15 +124,19 @@ namespace optier
             detections.Results.push_back(
                 std::move(result));
         }
-        ApplyNMS(detections);
-        std::cout << "\n========================================\n";
+        
+        RestoreOriginalCoordinates(frame);
+
+        ApplyNMS(frame);
+
+       /* std::cout << "\n========================================\n";
         std::cout << "YOLO DETECTIONS\n";
         std::cout << "========================================\n";
 
         std::cout
             << "Total Detections : "
             << detections.Results.size()
-            << "\n";
+            << "\n";*/
 
         std::size_t count =
             std::min<std::size_t>(
@@ -159,8 +165,10 @@ namespace optier
     }
 
     void DetectionPostProcessor::ApplyNMS(
-        DetectionCollection& detections)
+        VideoFrame& frame)
     {
+        DetectionCollection& detections =
+            frame.Detections;
         if (detections.Results.empty())
         {
             return;
@@ -211,5 +219,89 @@ namespace optier
         }
 
         detections = std::move(filtered);
+    }
+
+    void DetectionPostProcessor::RestoreOriginalCoordinates(
+        VideoFrame& frame)
+    {
+        DetectionCollection& detections =
+            frame.Detections;
+
+        const PreprocessMetadata& preprocess =
+            frame.Preprocess;
+
+        //
+        // Validate scale.
+        //
+        if (preprocess.Scale <= 0.0f)
+        {
+            return;
+        }
+
+        const float inverseScale =
+            1.0f / preprocess.Scale;
+
+        for (auto& detection : detections.Results)
+        {
+            //
+            // Remove letterbox padding.
+            //
+            detection.X -= preprocess.PadLeft;
+            detection.Y -= preprocess.PadTop;
+
+            //
+            // Scale back to original image.
+            //
+            detection.X =
+                static_cast<int>(
+                    detection.X * inverseScale);
+
+            detection.Y =
+                static_cast<int>(
+                    detection.Y * inverseScale);
+
+            detection.Width =
+                static_cast<int>(
+                    detection.Width * inverseScale);
+
+            detection.Height =
+                static_cast<int>(
+                    detection.Height * inverseScale);
+
+            //
+            // Clamp left/top.
+            //
+            detection.X =
+                std::max(
+                    0,
+                    detection.X);
+
+            detection.Y =
+                std::max(
+                    0,
+                    detection.Y);
+
+            //
+            // Clamp width.
+            //
+            if (detection.X + detection.Width >
+                preprocess.OriginalWidth)
+            {
+                detection.Width =
+                    preprocess.OriginalWidth -
+                    detection.X;
+            }
+
+            //
+            // Clamp height.
+            //
+            if (detection.Y + detection.Height >
+                preprocess.OriginalHeight)
+            {
+                detection.Height =
+                    preprocess.OriginalHeight -
+                    detection.Y;
+            }
+        }
     }
 } // namespace optier

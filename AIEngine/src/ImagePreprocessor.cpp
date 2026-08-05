@@ -8,22 +8,104 @@ namespace optier
 {
 
     bool ImagePreprocessor::Preprocess(
-        const cv::Mat& inputImage,
+        VideoFrame& frame,
         std::vector<float>& outputTensor)
     {
+        //
+        // Validate frame.
+        //
+        if (!frame.Image)
+        {
+            return false;
+        }
+
+        cv::Mat& inputImage =
+            *frame.Image;
+
         if (inputImage.empty())
         {
             return false;
         }
 
+        //
+        // Store original image information.
+        //
+        frame.Preprocess.OriginalWidth =
+            inputImage.cols;
+
+        frame.Preprocess.OriginalHeight =
+            inputImage.rows;
+
+        //
+        // Model input size.
+        //
+        constexpr int modelWidth = 640;
+        constexpr int modelHeight = 640;
+
+        frame.Preprocess.ModelWidth =
+            modelWidth;
+
+        frame.Preprocess.ModelHeight =
+            modelHeight;
+
+        //
+        // Compute resize scale.
+        //
+        const float scale =
+            std::min(
+                static_cast<float>(modelWidth) /
+                inputImage.cols,
+                static_cast<float>(modelHeight) /
+                inputImage.rows);
+
+        frame.Preprocess.Scale =
+            scale;
+
+        //
+        // Compute resized dimensions.
+        //
+        const int resizedWidth =
+            static_cast<int>(
+                inputImage.cols * scale);
+
+        const int resizedHeight =
+            static_cast<int>(
+                inputImage.rows * scale);
+
+        //
+        // Compute letterbox padding.
+        //
+        frame.Preprocess.PadLeft =
+            (modelWidth - resizedWidth) / 2;
+
+        frame.Preprocess.PadTop =
+            (modelHeight - resizedHeight) / 2;
+
+        frame.Preprocess.PadRight =
+            modelWidth -
+            resizedWidth -
+            frame.Preprocess.PadLeft;
+
+        frame.Preprocess.PadBottom =
+            modelHeight -
+            resizedHeight -
+            frame.Preprocess.PadTop;
+
+        //
+        // Existing preprocessing pipeline.
+        //
         cv::Mat resized =
-            LetterboxResize(inputImage);
+            LetterboxResize(
+                inputImage,
+                frame.Preprocess);
 
         cv::Mat rgb =
-            ConvertToRGB(resized);
+            ConvertToRGB(
+                resized);
 
         cv::Mat normalized =
-            ConvertToFloat(rgb);
+            ConvertToFloat(
+                rgb);
 
         ConvertToTensor(
             normalized,
@@ -34,21 +116,30 @@ namespace optier
 
     cv::Mat ImagePreprocessor::LetterboxResize(
         const cv::Mat& image,
-        int targetWidth,
-        int targetHeight)
+        const PreprocessMetadata& preprocess)
     {
+        const int targetWidth =
+            preprocess.ModelWidth;
+
+        const int targetHeight =
+            preprocess.ModelHeight;
+
         const float scale =
-            std::min(
-                static_cast<float>(targetWidth) /
-                image.cols,
-                static_cast<float>(targetHeight) /
-                image.rows);
+            preprocess.Scale;
 
         const int resizedWidth =
-            static_cast<int>(image.cols * scale);
+            static_cast<int>(
+                image.cols * scale);
 
         const int resizedHeight =
-            static_cast<int>(image.rows * scale);
+            static_cast<int>(
+                image.rows * scale);
+
+        const int offsetX =
+            preprocess.PadLeft;
+
+        const int offsetY =
+            preprocess.PadTop;
 
         cv::Mat resized;
 
@@ -67,12 +158,6 @@ namespace optier
                 114,
                 114,
                 114));
-
-        const int offsetX =
-            (targetWidth - resizedWidth) / 2;
-
-        const int offsetY =
-            (targetHeight - resizedHeight) / 2;
 
         resized.copyTo(
             output(

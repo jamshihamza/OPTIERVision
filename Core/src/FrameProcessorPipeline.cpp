@@ -19,10 +19,10 @@ namespace optier
     bool FrameProcessorPipeline::ProcessFrame(
         VideoFrame& frame)
     {
-        std::cout
+       /* std::cout
             << "[Pipeline] Frame "
             << frame.FrameNumber
-            << '\n';
+            << '\n';*/
         for (const auto& processor : m_processors)
         {
             if (!processor->ProcessFrame(frame))

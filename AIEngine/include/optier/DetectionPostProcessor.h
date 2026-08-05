@@ -4,6 +4,7 @@
 
 #include <opencv2/core/types.hpp>
 #include <optier/DetectionCollection.h>
+#include <optier/VideoFrame.h>
 
 namespace optier
 {
@@ -16,12 +17,16 @@ namespace optier
 
         bool Process(
             const std::vector<float>& outputTensor,
-            DetectionCollection& detections);
+            VideoFrame& frame);
 
     private:
 
         void ApplyNMS(
-            DetectionCollection& detections);
+            VideoFrame& frame);
+
+        void RestoreOriginalCoordinates(
+            VideoFrame& frame);
+
     private:
 
         static constexpr float ConfidenceThreshold = 0.25f;

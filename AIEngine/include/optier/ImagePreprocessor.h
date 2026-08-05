@@ -3,6 +3,8 @@
 #include <vector>
 
 #include <opencv2/core/mat.hpp>
+#include <optier/VideoFrame.h>
+#include <optier/PreprocessMetadata.h>
 
 namespace optier
 {
@@ -14,15 +16,14 @@ namespace optier
         ImagePreprocessor() = default;
 
         bool Preprocess(
-            const cv::Mat& inputImage,
+            VideoFrame& frame,
             std::vector<float>& outputTensor);
 
     private:
 
         cv::Mat LetterboxResize(
             const cv::Mat& image,
-            int targetWidth = 640,
-            int targetHeight = 640);
+            const PreprocessMetadata& preprocess);
 
         cv::Mat ConvertToRGB(
             const cv::Mat& image);
