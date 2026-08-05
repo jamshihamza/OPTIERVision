@@ -25,7 +25,7 @@ namespace optier
         VideoFrame& frame)
     {
         //
-        // Validate image.
+        // Validate image
         //
         if (!frame.Image)
         {
@@ -38,9 +38,39 @@ namespace optier
         }
 
         //
-        // Temporary implementation.
-        // Real inference will be added next.
+        // Preprocess image
         //
+        std::vector<float> inputTensor;
+
+        if (!m_preprocessor.Preprocess(
+            *frame.Image,
+            inputTensor))
+        {
+            return false;
+        }
+
+        //
+        // Run inference
+        //
+        std::vector<float> outputTensor;
+
+        if (!m_modelLoader.RunInference(
+            inputTensor,
+            outputTensor))
+        {
+            return false;
+        }
+
+        //
+        // Decode detections
+        //
+        if (!m_postProcessor.Process(
+            outputTensor,
+            frame.Detections))
+        {
+            return false;
+        }
+
         return true;
     }
 

@@ -1,56 +1,27 @@
 #include "pch.h"
 
-#include <filesystem>
-#include <iostream>
 #include <optier/ModelLoader.h>
+
+#include <array>
+#include <iostream>
+#include <filesystem>
 
 namespace optier
 {
 
     ModelLoader::ModelLoader(
         const std::string& modelPath)
-        : m_modelPath(modelPath)
+        :
+        m_modelPath(modelPath),
+        m_environment(
+            ORT_LOGGING_LEVEL_WARNING,
+            "OPTIER")
     {
     }
 
     ModelLoader::~ModelLoader()
     {
         Unload();
-    }
-
-    bool ModelLoader::CreateEnvironment()
-    {
-        try
-        {
-            m_environment =
-                std::make_unique<Ort::Env>(
-                    ORT_LOGGING_LEVEL_WARNING,
-                    "OPTIER");
-        }
-        catch (...)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    bool ModelLoader::CreateSessionOptions()
-    {
-        if (!m_environment)
-        {
-            return false;
-        }
-
-        m_sessionOptions =
-            std::make_unique<Ort::SessionOptions>();
-
-        m_sessionOptions->SetGraphOptimizationLevel(
-            GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
-
-        m_sessionOptions->SetIntraOpNumThreads(1);
-
-        return true;
     }
 
     bool ModelLoader::Load()
@@ -60,57 +31,78 @@ namespace optier
             return true;
         }
 
-        if (!CreateEnvironment())
-        {
-            return false;
-        }
-
-        if (!CreateSessionOptions())
-        {
-            return false;
-        }
-
         try
         {
-            const std::filesystem::path modelPath(
-                m_modelPath);
+            m_sessionOptions.SetGraphOptimizationLevel(
+                GraphOptimizationLevel::ORT_ENABLE_ALL);
+
+            std::filesystem::path modelPath(m_modelPath);
 
             m_session =
                 std::make_unique<Ort::Session>(
-                    *m_environment,
+                    m_environment,
                     modelPath.c_str(),
-                    *m_sessionOptions);
+                    m_sessionOptions);
+
+            Ort::AllocatorWithDefaultOptions allocator;
+
+            m_inputNames.clear();
+            m_outputNames.clear();
+
+            std::size_t inputCount =
+                m_session->GetInputCount();
+
+            for (std::size_t i = 0; i < inputCount; ++i)
+            {
+                auto name =
+                    m_session->GetInputNameAllocated(
+                        i,
+                        allocator);
+
+                m_inputNames.emplace_back(
+                    name.get());
+            }
+
+            std::size_t outputCount =
+                m_session->GetOutputCount();
+
+            for (std::size_t i = 0; i < outputCount; ++i)
+            {
+                auto name =
+                    m_session->GetOutputNameAllocated(
+                        i,
+                        allocator);
+
+                m_outputNames.emplace_back(
+                    name.get());
+            }
+
+            PrintModelInfo();
+
+            m_loaded = true;
+
+            return true;
         }
-        catch (const Ort::Exception&)
+        catch (const Ort::Exception& e)
         {
+            std::cout
+                << "ONNX Runtime Error : "
+                << e.what()
+                << '\n';
+
             return false;
         }
-
-        if (!ReadModelMetadata())
-        {
-            return false;
-        }
-
-        m_loaded = true;
-
-        return true;
     }
 
     void ModelLoader::Unload()
     {
         m_session.reset();
 
-        m_sessionOptions.reset();
-
-        m_environment.reset();
-
-        m_loaded = false;
-
         m_inputNames.clear();
+
         m_outputNames.clear();
 
-        m_inputShape.clear();
-        m_outputShape.clear();
+        m_loaded = false;
     }
 
     bool ModelLoader::IsLoaded() const
@@ -118,168 +110,156 @@ namespace optier
         return m_loaded;
     }
 
-    const std::string& ModelLoader::ModelPath() const
+    void ModelLoader::PrintModelInfo()
     {
-        return m_modelPath;
-    }
+        if (!m_session)
+        {
+            return;
+        }
 
-    Ort::Session* ModelLoader::Session()
-    {
-        return m_session.get();
-    }
-
-    const std::vector<std::string>&
-        ModelLoader::InputNames() const
-    {
-        return m_inputNames;
-    }
-
-    const std::vector<std::string>&
-        ModelLoader::OutputNames() const
-    {
-        return m_outputNames;
-    }
-
-    const std::vector<int64_t>&
-        ModelLoader::InputShape() const
-    {
-        return m_inputShape;
-    }
-
-    const std::vector<int64_t>&
-        ModelLoader::OutputShape() const
-    {
-        return m_outputShape;
-    }
-
-    void ModelLoader::PrintModelInfo() const
-    {
-        std::cout << "\n";
-        std::cout << "========================================\n";
-        std::cout << " ONNX Model Information\n";
+        std::cout << "\n========================================\n";
+        std::cout << "MODEL INFORMATION\n";
         std::cout << "========================================\n";
 
         std::cout
-            << "Model : "
-            << m_modelPath
-            << "\n\n";
-
-        std::cout
-            << "Inputs : "
+            << "Inputs  : "
             << m_inputNames.size()
             << "\n";
 
         std::cout
-            << "Outputs: "
+            << "Outputs : "
             << m_outputNames.size()
-            << "\n\n";
+            << "\n";
 
-        if (!m_inputNames.empty())
+        for (const auto& name : m_inputNames)
         {
             std::cout
-                << "Input Name : "
-                << m_inputNames[0]
+                << "Input : "
+                << name
                 << "\n";
-
-            std::cout
-                << "Input Shape: ";
-
-            for (auto value : m_inputShape)
-            {
-                std::cout << value << " ";
-            }
-
-            std::cout << "\n\n";
         }
 
-        if (!m_outputNames.empty())
+        for (const auto& name : m_outputNames)
         {
             std::cout
-                << "Output Name: "
-                << m_outputNames[0]
+                << "Output : "
+                << name
                 << "\n";
-
-            std::cout
-                << "Output Shape: ";
-
-            for (auto value : m_outputShape)
-            {
-                std::cout << value << " ";
-            }
-
-            std::cout << "\n";
         }
 
-        std::cout
-            << "========================================\n";
+        std::cout << "========================================\n\n";
     }
 
-    bool ModelLoader::ReadModelMetadata()
+    bool ModelLoader::RunInference(
+        const std::vector<float>& inputTensor,
+        std::vector<float>& outputTensor)
     {
+        if (!m_loaded)
+        {
+            return false;
+        }
+
         if (!m_session)
         {
             return false;
         }
 
-        Ort::AllocatorWithDefaultOptions allocator;
-
-        m_inputNames.clear();
-        m_outputNames.clear();
-
-        m_inputShape.clear();
-        m_outputShape.clear();
-
-        //
-        // Input metadata
-        //
-        const std::size_t inputCount =
-            m_session->GetInputCount();
-
-        if (inputCount > 0)
+        constexpr std::int64_t inputShape[] =
         {
-            auto inputName =
-                m_session->GetInputNameAllocated(
-                    0,
-                    allocator);
+            1,
+            3,
+            640,
+            640
+        };
 
-            m_inputNames.emplace_back(
-                inputName.get());
+        Ort::MemoryInfo memoryInfo =
+            Ort::MemoryInfo::CreateCpu(
+                OrtArenaAllocator,
+                OrtMemTypeDefault);
 
-            auto inputTypeInfo =
-                m_session->GetInputTypeInfo(0);
+        Ort::Value inputValue =
+            Ort::Value::CreateTensor<float>(
+                memoryInfo,
+                const_cast<float*>(inputTensor.data()),
+                inputTensor.size(),
+                inputShape,
+                4);
 
-            auto tensorInfo =
-                inputTypeInfo.GetTensorTypeAndShapeInfo();
+        std::vector<const char*> inputNames;
 
-            m_inputShape =
-                tensorInfo.GetShape();
+        for (const auto& name : m_inputNames)
+        {
+            inputNames.push_back(name.c_str());
         }
 
-        //
-        // Output metadata
-        //
-        const std::size_t outputCount =
-            m_session->GetOutputCount();
+        std::vector<const char*> outputNames;
 
-        if (outputCount > 0)
+        for (const auto& name : m_outputNames)
         {
-            auto outputName =
-                m_session->GetOutputNameAllocated(
-                    0,
-                    allocator);
-
-            m_outputNames.emplace_back(
-                outputName.get());
-
-            auto outputTypeInfo =
-                m_session->GetOutputTypeInfo(0);
-
-            auto tensorInfo =
-                outputTypeInfo.GetTensorTypeAndShapeInfo();
-
-            m_outputShape =
-                tensorInfo.GetShape();
+            outputNames.push_back(name.c_str());
         }
+
+        auto outputs =
+            m_session->Run(
+                Ort::RunOptions{ nullptr },
+                inputNames.data(),
+                &inputValue,
+                1,
+                outputNames.data(),
+                outputNames.size());
+
+        if (outputs.empty())
+        {
+            return false;
+        }
+
+        std::cout << "\n========================================\n";
+        std::cout << "ONNX OUTPUT INFORMATION\n";
+        std::cout << "========================================\n";
+
+        for (std::size_t i = 0; i < outputs.size(); ++i)
+        {
+            auto tensorInfo =
+                outputs[i].GetTensorTypeAndShapeInfo();
+
+            auto shape =
+                tensorInfo.GetShape();
+
+            std::cout
+                << "Output "
+                << i
+                << "\n";
+
+            std::cout
+                << "Shape : ";
+
+            for (auto dim : shape)
+            {
+                std::cout
+                    << dim
+                    << " ";
+            }
+
+            std::cout << "\n";
+
+            std::cout
+                << "Elements : "
+                << tensorInfo.GetElementCount()
+                << "\n\n";
+        }
+
+        auto tensorInfo =
+            outputs[0].GetTensorTypeAndShapeInfo();
+
+        float* data =
+            outputs[0].GetTensorMutableData<float>();
+
+        std::size_t count =
+            tensorInfo.GetElementCount();
+
+        outputTensor.assign(
+            data,
+            data + count);
 
         return true;
     }

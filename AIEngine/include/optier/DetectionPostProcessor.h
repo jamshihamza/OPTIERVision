@@ -13,16 +13,13 @@ namespace optier
 
         DetectionPostProcessor() = default;
 
-        ~DetectionPostProcessor() = default;
-
         bool Process(
+            const std::vector<float>& outputTensor,
             DetectionCollection& detections);
 
     private:
 
-        float m_confidenceThreshold = 0.25f;
-
-        float m_nmsThreshold = 0.45f;
+        static constexpr float ConfidenceThreshold = 0.25f;
     };
 
 } // namespace optier

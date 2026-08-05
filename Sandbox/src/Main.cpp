@@ -5,13 +5,15 @@
 #include <memory>
 #include <thread>
 
-#include <optier/ModelLoader.h>
-
 #include <optier/OpenCVRTSPClient.h>
+
 #include <optier/FrameQueue.h>
 #include <optier/CaptureThread.h>
 #include <optier/ConsumerThread.h>
 #include <optier/FrameProcessorPipeline.h>
+
+#include <optier/YOLODetector.h>
+#include <optier/YOLODetectorProcessor.h>
 
 #include <optier/VideoRenderer.h>
 #include <optier/SnapshotProcessor.h>
@@ -28,26 +30,25 @@ int main()
 
     //
     // -------------------------------------------------
-    // Test ONNX Runtime
+    // Initialize YOLO Detector
     // -------------------------------------------------
     //
     std::cout << "Loading YOLO model...\n";
 
-    ModelLoader loader(
-        "libraries/models/yolov8n.onnx");
+    auto detector =
+        std::make_shared<YOLODetector>(
+            "libraries/models/yolov8n.onnx");
 
-    if (!loader.Load())
+    if (!detector->Initialize())
     {
         std::cout
-            << "ERROR : Failed to load ONNX model.\n";
+            << "ERROR : Failed to initialize YOLO detector.\n";
 
         return -1;
     }
 
-    loader.PrintModelInfo();
-
-    std::cout << "\n";
-    std::cout << "ONNX Runtime initialized successfully.\n\n";
+    std::cout
+        << "YOLO detector initialized successfully.\n\n";
 
     //
     // -------------------------------------------------
@@ -59,17 +60,21 @@ int main()
     const std::string rtspUrl =
         "rtsp://admin:Opt$0987@192.168.1.100:80/rtsp/streaming?channel=09&subtype=0";
 
-    std::cout << "Connecting to RTSP stream...\n";
+    std::cout
+        << "Connecting to RTSP stream...\n";
 
     if (!client.Connect(rtspUrl))
     {
         std::cout
             << "Failed to connect to RTSP stream.\n";
 
+        detector->Shutdown();
+
         return -1;
     }
 
-    std::cout << "Connected successfully.\n";
+    std::cout
+        << "Connected successfully.\n";
 
     //
     // -------------------------------------------------
@@ -85,6 +90,10 @@ int main()
     //
     FrameProcessorPipeline pipeline;
 
+    auto yoloProcessor =
+        std::make_shared<YOLODetectorProcessor>(
+            detector);
+
     auto detectionMapper =
         std::make_shared<DetectionMapperProcessor>();
 
@@ -99,10 +108,23 @@ int main()
         std::make_shared<SnapshotProcessor>(
             "snapshots");
 
-    pipeline.AddProcessor(detectionMapper);
-    pipeline.AddProcessor(overlayProcessor);
-    pipeline.AddProcessor(renderer);
-    pipeline.AddProcessor(snapshotProcessor);
+    //
+    // Processing Order
+    //
+    pipeline.AddProcessor(
+        yoloProcessor);
+
+    pipeline.AddProcessor(
+        detectionMapper);
+
+    pipeline.AddProcessor(
+        overlayProcessor);
+
+    pipeline.AddProcessor(
+        renderer);
+
+    pipeline.AddProcessor(
+        snapshotProcessor);
 
     //
     // -------------------------------------------------
@@ -117,10 +139,14 @@ int main()
         queue,
         pipeline);
 
-    std::cout << "Starting CaptureThread...\n";
+    std::cout
+        << "Starting CaptureThread...\n";
+
     capture.Start();
 
-    std::cout << "Starting ConsumerThread...\n";
+    std::cout
+        << "Starting ConsumerThread...\n";
+
     consumer.Start();
 
     std::cout << "\n";
@@ -144,7 +170,8 @@ int main()
     // Shutdown
     // -------------------------------------------------
     //
-    std::cout << "\nStopping...\n";
+    std::cout
+        << "\nStopping...\n";
 
     capture.Stop();
 
@@ -152,7 +179,7 @@ int main()
 
     client.Disconnect();
 
-    loader.Unload();
+    detector->Shutdown();
 
     std::cout << "\n";
     std::cout
@@ -160,7 +187,8 @@ int main()
         << consumer.ProcessedFrames()
         << "\n";
 
-    std::cout << "\nPipeline stopped successfully.\n";
+    std::cout
+        << "\nPipeline stopped successfully.\n";
 
     return 0;
 }
