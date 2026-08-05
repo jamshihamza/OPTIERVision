@@ -10,6 +10,7 @@
 #include <optier/BoundingBox.h>
 #include <optier/DetectionCollection.h>
 #include <optier/FrameStatistics.h>
+#include <optier/PreprocessMetadata.h>
 
 namespace optier
 {
@@ -31,7 +32,10 @@ namespace optier
         // Image
         //
         std::shared_ptr<cv::Mat> Image;
-
+        //
+        // Image preprocessing metadata.
+        //
+        PreprocessMetadata Preprocess;
         //
         // Runtime Statistics
         //

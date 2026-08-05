@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include <opencv2/core/types.hpp>
 #include <optier/DetectionCollection.h>
 
 namespace optier
@@ -19,7 +20,13 @@ namespace optier
 
     private:
 
+        void ApplyNMS(
+            DetectionCollection& detections);
+    private:
+
         static constexpr float ConfidenceThreshold = 0.25f;
+
+        static constexpr float NMSThreshold = 0.45f;
     };
 
 } // namespace optier

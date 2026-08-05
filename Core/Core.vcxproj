@@ -167,6 +167,7 @@
     <ClInclude Include="include\optier\DummyDetector.h" />
     <ClInclude Include="include\optier\FrameProcessorPipeline.h" />
     <ClInclude Include="include\optier\FrameStatistics.h" />
+    <ClInclude Include="include\optier\PreprocessMetadata.h" />
     <ClInclude Include="include\optier\YOLODetectorProcessor.h" />
     <ClInclude Include="include\optier\IObjectDetector.h" />
     <ClInclude Include="include\optier\OverlayProcessor.h" />

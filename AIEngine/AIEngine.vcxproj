@@ -141,10 +141,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\optier\COCOClasses.h" />
     <ClInclude Include="include\optier\DetectionPostProcessor.h" />
     <ClInclude Include="include\optier\ImagePreprocessor.h" />
     <ClInclude Include="include\optier\IObjectDetector.h" />
     <ClInclude Include="include\optier\ModelLoader.h" />
+    <ClInclude Include="include\optier\NonMaximumSuppression.h" />
     <ClInclude Include="include\optier\YOLODetector.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
@@ -158,6 +160,7 @@
     <ClCompile Include="src\DetectionPostProcessor.cpp" />
     <ClCompile Include="src\ImagePreprocessor.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
+    <ClCompile Include="src\NonMaximumSuppression.cpp" />
     <ClCompile Include="src\YOLODetector.cpp" />
   </ItemGroup>
   <ItemGroup>

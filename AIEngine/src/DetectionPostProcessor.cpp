@@ -1,8 +1,11 @@
-#include "pch.h"
+﻿#include "pch.h"
 
 #include <algorithm>
 
+#include <opencv2/dnn/dnn.hpp>
 #include <optier/DetectionPostProcessor.h>
+#include <optier/COCOClasses.h>
+#include <iostream>
 
 namespace optier
 {
@@ -18,94 +21,195 @@ namespace optier
             return false;
         }
 
-        //
-        // YOLOv8 output
-        //
-        constexpr int BoxCount = 8400;
+        constexpr int PredictionCount = 8400;
         constexpr int FeatureCount = 84;
+        constexpr int ClassCount = 80;
 
-        if (outputTensor.size() < BoxCount * FeatureCount)
+        if (outputTensor.size() !=
+            PredictionCount * FeatureCount)
         {
             return false;
         }
 
+        constexpr float ConfidenceThreshold = 0.25f;
+
         //
-        // Layout:
+        // Tensor Layout
         //
-        // 0  -> x
-        // 1  -> y
-        // 2  -> w
-        // 3  -> h
-        // 4..83 -> class scores
+        // Row 0  -> x
+        // Row 1  -> y
+        // Row 2  -> w
+        // Row 3  -> h
+        // Row 4  -> class 0
+        // ...
+        // Row 83 -> class 79
         //
-        for (int i = 0; i < BoxCount; ++i)
+        for (int prediction = 0;
+            prediction < PredictionCount;
+            ++prediction)
         {
-            float x =
-                outputTensor[0 * BoxCount + i];
+            float centerX =
+                outputTensor[0 * PredictionCount + prediction];
 
-            float y =
-                outputTensor[1 * BoxCount + i];
+            float centerY =
+                outputTensor[1 * PredictionCount + prediction];
 
-            float w =
-                outputTensor[2 * BoxCount + i];
+            float width =
+                outputTensor[2 * PredictionCount + prediction];
 
-            float h =
-                outputTensor[3 * BoxCount + i];
+            float height =
+                outputTensor[3 * PredictionCount + prediction];
 
             float bestScore = 0.0f;
+
             int bestClass = -1;
 
             //
-            // Find highest class score
+            // Search all 80 classes
             //
-            for (int c = 4; c < FeatureCount; ++c)
+            for (int cls = 0;
+                cls < ClassCount;
+                ++cls)
             {
                 float score =
-                    outputTensor[c * BoxCount + i];
+                    outputTensor[
+                        (cls + 4) * PredictionCount +
+                            prediction];
 
                 if (score > bestScore)
                 {
                     bestScore = score;
-                    bestClass = c - 4;
+                    bestClass = cls;
                 }
             }
 
-            //
-            // Confidence threshold
-            //
             if (bestScore < ConfidenceThreshold)
             {
                 continue;
             }
 
-            DetectionResult detection;
+            DetectionResult result;
 
-            detection.ClassId =
-                static_cast<std::uint32_t>(bestClass);
+            result.ClassId =
+                static_cast<std::uint32_t>(
+                    bestClass);
 
-            detection.ClassName =
-                std::to_string(bestClass);
+            result.ClassName =
+                std::string(
+                    COCOClasses::Names[bestClass]);
 
-            detection.Confidence =
+            result.Confidence =
                 bestScore;
 
-            detection.X =
-                static_cast<int>(x - w / 2.0f);
+            //
+            // Convert
+            // Center → Top Left
+            //
+            result.X =
+                static_cast<int>(
+                    centerX - width * 0.5f);
 
-            detection.Y =
-                static_cast<int>(y - h / 2.0f);
+            result.Y =
+                static_cast<int>(
+                    centerY - height * 0.5f);
 
-            detection.Width =
-                static_cast<int>(w);
+            result.Width =
+                static_cast<int>(width);
 
-            detection.Height =
-                static_cast<int>(h);
+            result.Height =
+                static_cast<int>(height);
 
             detections.Results.push_back(
-                std::move(detection));
+                std::move(result));
+        }
+        ApplyNMS(detections);
+        std::cout << "\n========================================\n";
+        std::cout << "YOLO DETECTIONS\n";
+        std::cout << "========================================\n";
+
+        std::cout
+            << "Total Detections : "
+            << detections.Results.size()
+            << "\n";
+
+        std::size_t count =
+            std::min<std::size_t>(
+                detections.Results.size(),
+                10);
+
+        for (std::size_t i = 0; i < count; ++i)
+        {
+            const auto& d =
+                detections.Results[i];
+
+            std::cout
+                << "[" << i << "] "
+                << d.ClassName
+                << " (" << d.ClassId << ")"
+                << "  Confidence=" << d.Confidence
+                << "  Box=("
+                << d.X << ", "
+                << d.Y << ", "
+                << d.Width << ", "
+                << d.Height << ")\n";
         }
 
+        std::cout << "========================================\n";
         return true;
     }
 
+    void DetectionPostProcessor::ApplyNMS(
+        DetectionCollection& detections)
+    {
+        if (detections.Results.empty())
+        {
+            return;
+        }
+
+        std::vector<cv::Rect> boxes;
+        std::vector<float> scores;
+
+        boxes.reserve(detections.Results.size());
+        scores.reserve(detections.Results.size());
+
+        for (const auto& detection : detections.Results)
+        {
+            boxes.emplace_back(
+                detection.X,
+                detection.Y,
+                detection.Width,
+                detection.Height);
+
+            scores.push_back(
+                detection.Confidence);
+        }
+
+        std::vector<int> indices;
+
+        cv::dnn::NMSBoxes(
+            boxes,
+            scores,
+            ConfidenceThreshold,
+            NMSThreshold,
+            indices);
+
+        DetectionCollection filtered;
+
+        filtered.FrameNumber =
+            detections.FrameNumber;
+
+        filtered.Timestamp =
+            detections.Timestamp;
+
+        filtered.InferenceTime =
+            detections.InferenceTime;
+
+        for (int index : indices)
+        {
+            filtered.Results.push_back(
+                detections.Results[index]);
+        }
+
+        detections = std::move(filtered);
+    }
 } // namespace optier
