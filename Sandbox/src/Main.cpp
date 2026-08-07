@@ -58,7 +58,7 @@ int main()
     OpenCVRTSPClient client;
 
     const std::string rtspUrl =
-        "rtsp://admin:Opt$0987@192.168.1.100:80/rtsp/streaming?channel=09&subtype=0";
+        "rtsp://admin:Opt$0987@192.168.1.100:80/rtsp/streaming?channel=02&subtype=0";
 
     std::cout
         << "Connecting to RTSP stream...\n";

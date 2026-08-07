@@ -127,6 +127,8 @@ namespace optier
         
         RestoreOriginalCoordinates(frame);
 
+		ValidateDetections(frame);
+
         ApplyNMS(frame);
 
        /* std::cout << "\n========================================\n";
@@ -304,4 +306,61 @@ namespace optier
             }
         }
     }
+
+    void DetectionPostProcessor::ValidateDetections(
+        VideoFrame& frame)
+    {
+        DetectionCollection& detections =
+            frame.Detections;
+
+        const auto& preprocess =
+            frame.Preprocess;
+
+        auto& results =
+            detections.Results;
+
+        results.erase(
+            std::remove_if(
+                results.begin(),
+                results.end(),
+                [&](const DetectionResult& detection)
+                {
+                    //
+                    // Invalid size
+                    //
+                    if (detection.Width <= 0 ||
+                        detection.Height <= 0)
+                    {
+                        return true;
+                    }
+
+                    //
+                    // Image boundary
+                    //
+                    if (detection.X >= preprocess.OriginalWidth ||
+                        detection.Y >= preprocess.OriginalHeight)
+                    {
+                        return true;
+                    }
+
+                    //
+                    // Extremely large boxes
+                    //
+                    if (detection.Width >
+                        preprocess.OriginalWidth * 0.90f)
+                    {
+                        return true;
+                    }
+
+                    if (detection.Height >
+                        preprocess.OriginalHeight * 0.90f)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }),
+            results.end());
+    }
+
 } // namespace optier

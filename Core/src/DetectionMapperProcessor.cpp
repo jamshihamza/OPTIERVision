@@ -19,4 +19,8 @@ namespace optier
         return true;
     }
 
+    std::string_view optier::DetectionMapperProcessor::Name() const
+    {
+        return "DetectionMapperProcessor";
+    }
 } // namespace optier

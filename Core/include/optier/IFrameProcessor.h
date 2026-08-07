@@ -1,6 +1,7 @@
 #pragma once
 
 #include <optier/VideoFrame.h>
+#include <string_view>
 
 namespace optier
 {
@@ -11,10 +12,11 @@ namespace optier
 
         virtual ~IFrameProcessor() = default;
 
-    public:
-
+  
         virtual bool ProcessFrame(
             VideoFrame& frame) = 0;
+
+        virtual std::string_view Name() const = 0;
     };
 
 }

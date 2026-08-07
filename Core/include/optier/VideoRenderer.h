@@ -26,6 +26,8 @@ namespace optier
 
         void Display();
 
+        std::string_view Name() const override;
+
     private:
 
         std::string m_windowName;

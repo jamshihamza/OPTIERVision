@@ -12,6 +12,8 @@ namespace optier
 
         bool ProcessFrame(
             VideoFrame& frame) override;
+
+        std::string_view Name() const override;
     };
 
 } // namespace optier

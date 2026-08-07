@@ -251,6 +251,37 @@ namespace optier
         auto tensorInfo =
             outputs[0].GetTensorTypeAndShapeInfo();
 
+        auto shape =
+            tensorInfo.GetShape();
+
+        static bool printed = false;
+
+        if (!printed)
+        {
+            std::cout
+                << "\n========== ONNX OUTPUT ==========\n";
+
+            std::cout
+                << "Dimensions : ";
+
+            for (auto dimension : shape)
+            {
+                std::cout
+                    << dimension
+                    << " ";
+            }
+
+            std::cout
+                << "\n";
+
+            std::cout
+                << "Element Count : "
+                << tensorInfo.GetElementCount()
+                << "\n";
+
+            printed = true;
+        }
+
         float* data =
             outputs[0].GetTensorMutableData<float>();
 

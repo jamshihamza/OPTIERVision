@@ -131,7 +131,7 @@ namespace optier
             cv::Point(x, y),
             cv::FONT_HERSHEY_SIMPLEX,
             scale,
-            cv::Scalar(255, 255, 255),   // White
+            cv::Scalar(0, 0, 0),   // White
             thickness,
             cv::LINE_AA);
     }
@@ -285,5 +285,9 @@ namespace optier
                 box);
         }
     }
-
+  
+    std::string_view OverlayProcessor::Name() const
+    {
+        return "OverlayProcessor";
+    }
 } // namespace optier

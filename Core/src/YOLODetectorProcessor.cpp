@@ -37,10 +37,16 @@ namespace optier
             return false;
         }
 
+      
         //
         // Run AI detector.
         //
         return m_detector->Detect(frame);
-    }
 
+       
+    }
+    std::string_view optier::YOLODetectorProcessor::Name() const
+    {
+        return "YOLODetectorProcessor";
+    }
 } // namespace optier

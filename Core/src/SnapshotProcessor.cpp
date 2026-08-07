@@ -73,4 +73,8 @@ namespace optier
             *frame.Image);
     }
 
+    std::string_view optier::SnapshotProcessor::Name() const
+    {
+        return "SnapshotProcessor";
+    }
 }

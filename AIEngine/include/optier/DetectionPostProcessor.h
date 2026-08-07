@@ -27,6 +27,9 @@ namespace optier
         void RestoreOriginalCoordinates(
             VideoFrame& frame);
 
+        void ValidateDetections(
+            VideoFrame& frame);
+
     private:
 
         static constexpr float ConfidenceThreshold = 0.25f;

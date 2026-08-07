@@ -63,4 +63,8 @@ namespace optier
         cv::waitKey(1);
     }
 
+    std::string_view optier::VideoRenderer::Name() const
+    {
+        return "VideoRenderer";
+    }
 }
