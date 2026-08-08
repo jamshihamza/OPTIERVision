@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <optier/PerformanceMonitorProcessor.h>
+#include <string_view>
 
 namespace optier
 {
@@ -27,6 +28,14 @@ namespace optier
         //
         ++m_frameCounter;
 
+        //
+        // Accumulate per-stage timings
+        //
+        for (const auto& timing : frame.Statistics.ProcessorTimings)
+        {
+            m_stageTotals[std::string(timing.ProcessorName)] +=
+                timing.Duration;
+        }
         //
         // Accumulate processing time
         //
@@ -85,9 +94,28 @@ namespace optier
             std::cout << "Maximum Time  : " << m_maxTime.count() << " us\n";
             std::cout << "========================================\n\n";
 
+            std::cout << "\n";
+            std::cout << "Per-Stage Average\n";
+            std::cout << "----------------------------------------\n";
+
+            for (const auto& stage : m_stageTotals)
+            {
+                const auto average =
+                    stage.second.count() /
+                    static_cast<long long>(m_frameCounter);
+
+                std::cout
+                    << stage.first
+                    << " : "
+                    << average
+                    << " us\n";
+            }
+
             //
             // Reset
             //
+            m_stageTotals.clear();
+
             m_frameCounter = 0;
             m_totalTime = std::chrono::microseconds{ 0 };
             m_minTime = std::chrono::microseconds::max();
@@ -97,5 +125,8 @@ namespace optier
 
         return true;
     }
-
+    std::string_view optier::PerformanceMonitorProcessor::Name() const
+    {
+        return "PerformanceMonitorProcessor";
+    }
 } // namespace optier

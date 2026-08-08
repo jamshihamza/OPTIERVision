@@ -2,6 +2,7 @@
 
 #include <optier/DetectionMapperProcessor.h>
 #include <optier/DetectionMapper.h>
+#include <string_view>
 
 namespace optier
 {

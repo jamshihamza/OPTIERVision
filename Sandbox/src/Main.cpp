@@ -58,7 +58,7 @@ int main()
     OpenCVRTSPClient client;
 
     const std::string rtspUrl =
-        "rtsp://admin:Opt$0987@192.168.1.100:80/rtsp/streaming?channel=02&subtype=0";
+        "rtsp://admin:Opt$0987@192.168.1.100:80/rtsp/streaming?channel=09&subtype=0";
 
     std::cout
         << "Connecting to RTSP stream...\n";
@@ -107,6 +107,8 @@ int main()
     auto snapshotProcessor =
         std::make_shared<SnapshotProcessor>(
             "snapshots");
+    auto performanceMonitor =
+        std::make_shared<PerformanceMonitorProcessor>();
 
     //
     // Processing Order
@@ -115,16 +117,19 @@ int main()
         yoloProcessor);
 
     pipeline.AddProcessor(
-        detectionMapper);
+       detectionMapper);
 
-    pipeline.AddProcessor(
-        overlayProcessor);
+  pipeline.AddProcessor(
+       overlayProcessor);
 
     pipeline.AddProcessor(
         renderer);
 
     pipeline.AddProcessor(
         snapshotProcessor);
+
+   // pipeline.AddProcessor(
+		//performanceMonitor);    
 
     //
     // -------------------------------------------------

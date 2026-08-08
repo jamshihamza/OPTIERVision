@@ -2,6 +2,8 @@
 
 #include <chrono>
 #include <cstdint>
+#include <string>
+#include <unordered_map>
 
 #include <optier/IFrameProcessor.h>
 
@@ -18,6 +20,7 @@ namespace optier
         bool ProcessFrame(
             VideoFrame& frame) override;
 
+        std::string_view Name() const override;
     private:
 
         //
@@ -39,6 +42,11 @@ namespace optier
 
         std::chrono::microseconds
             m_maxTime{ 0 };
+
+        std::unordered_map<
+            std::string,
+            std::chrono::microseconds>
+            m_stageTotals;
     };
 
 } // namespace optier

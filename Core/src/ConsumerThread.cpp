@@ -79,33 +79,14 @@ namespace optier
                 break;
             }
 
-            //
-            // Processing starts
-            //
-            frame.Statistics.ProcessingStartTime =
-                std::chrono::steady_clock::now();
-
+            
             //
             // Execute the frame processing pipeline
             //
             bool ok =
                 m_pipeline.ProcessFrame(frame);
 
-            //
-            // Processing ends
-            //
-            frame.Statistics.ProcessingEndTime =
-                std::chrono::steady_clock::now();
-
-            //
-            // Calculate processing duration
-            //
-            frame.Statistics.ProcessingDuration =
-                std::chrono::duration_cast<std::chrono::microseconds>(
-                    frame.Statistics.ProcessingEndTime -
-                    frame.Statistics.ProcessingStartTime);
-
-     
+           
 
             //
             // Skip failed frames
@@ -115,6 +96,7 @@ namespace optier
                 continue;
             }
 
+          
             //
             // Statistics
             //

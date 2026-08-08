@@ -2,7 +2,7 @@
 
 #include <optier/YOLODetectorProcessor.h>
 #include <optier/IObjectDetector.h>
-
+#include <string_view>
 
 namespace optier
 {
