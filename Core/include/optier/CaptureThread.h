@@ -36,8 +36,6 @@ namespace optier
 
         void Run();
 
-    private:
-
         OpenCVRTSPClient& m_client;
 
         FrameQueue& m_queue;
@@ -45,6 +43,14 @@ namespace optier
         std::thread m_thread;
 
         std::atomic<bool> m_running{ false };
+
+        //
+        // Performance Statistics
+        //
+        std::uint64_t m_capturedFrames{ 0 };
+
+        std::chrono::steady_clock::time_point m_lastReport =
+            std::chrono::steady_clock::now();
     };
 
 }

@@ -50,6 +50,17 @@ namespace optier
 
         bool IsShutdown() const;
 
+        //
+        // Statistics
+        //
+        std::uint64_t TotalPushes() const;
+
+        std::uint64_t TotalPops() const;
+
+        std::uint64_t DroppedFrames() const;
+
+        std::size_t PeakQueueSize() const;
+
     private:
 
         mutable std::mutex m_mutex;
@@ -61,6 +72,25 @@ namespace optier
         std::size_t m_capacity;
 
         bool m_shutdown{ false };
+
+        //
+        // Queue Statistics
+        //
+        std::uint64_t m_totalPushes{ 0 };
+
+        std::uint64_t m_totalPops{ 0 };
+
+        std::uint64_t m_droppedFrames{ 0 };
+
+        std::size_t m_peakQueueSize{ 0 };
+
+        std::uint64_t m_pushCount{ 0 };
+
+        std::uint64_t m_popCount{ 0 };
+
+        std::uint64_t m_dropCount{ 0 };
+
+        std::size_t m_peakSize{ 0 };
     };
 
 }

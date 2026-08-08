@@ -11,18 +11,29 @@ namespace optier
     bool PerformanceMonitorProcessor::ProcessFrame(
         VideoFrame& frame)
     {
+        std::cout
+            << "[PerformanceMonitor] Frame "
+            << frame.FrameNumber
+            << '\n';
 
         std::cout
             << "[PerformanceMonitor] this="
             << this
             << '\n';
+
         //
         // Convert processing time to microseconds
         //
-        auto processingTime =
+       /* auto processingTime =
             std::chrono::duration_cast<std::chrono::microseconds>(
-                frame.Statistics.ProcessingDuration);
+                frame.Statistics.ProcessingDuration);*/
 
+        std::chrono::microseconds processingTime{ 0 };
+
+        for (const auto& timing : frame.Statistics.ProcessorTimings)
+        {
+            processingTime += timing.Duration;
+        }
         //
         // Count processed frames
         //
@@ -36,6 +47,7 @@ namespace optier
             m_stageTotals[std::string(timing.ProcessorName)] +=
                 timing.Duration;
         }
+
         //
         // Accumulate processing time
         //
@@ -98,11 +110,15 @@ namespace optier
             std::cout << "Per-Stage Average\n";
             std::cout << "----------------------------------------\n";
 
+            long long totalStageAverage = 0;
+
             for (const auto& stage : m_stageTotals)
             {
                 const auto average =
                     stage.second.count() /
                     static_cast<long long>(m_frameCounter);
+
+                totalStageAverage += average;
 
                 std::cout
                     << stage.first
@@ -110,6 +126,12 @@ namespace optier
                     << average
                     << " us\n";
             }
+
+            std::cout << "----------------------------------------\n";
+            std::cout
+                << "Total Stage Time : "
+                << totalStageAverage
+                << " us\n";
 
             //
             // Reset

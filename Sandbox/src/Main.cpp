@@ -113,8 +113,8 @@ int main()
     //
     // Processing Order
     //
-    pipeline.AddProcessor(
-        yoloProcessor);
+   pipeline.AddProcessor(
+      yoloProcessor);
 
     pipeline.AddProcessor(
        detectionMapper);
@@ -128,8 +128,8 @@ int main()
     pipeline.AddProcessor(
         snapshotProcessor);
 
-   // pipeline.AddProcessor(
-		//performanceMonitor);    
+   pipeline.AddProcessor(
+		performanceMonitor);    
 
     //
     // -------------------------------------------------

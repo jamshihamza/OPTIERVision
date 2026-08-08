@@ -4,6 +4,7 @@
 
 #include <chrono>
 #include <thread>
+#include <iostream>
 
 namespace optier
 {
@@ -101,6 +102,42 @@ namespace optier
             // Statistics
             //
             ++m_processedFrames;
+
+            if ((m_processedFrames.load() % 60) == 0)
+            {
+                std::cout << "\n";
+                std::cout << "========================================\n";
+                std::cout << " Queue Statistics\n";
+                std::cout << "========================================\n";
+
+                std::cout
+                    << "Current Queue Size : "
+                    << m_queue.Size()
+                    << "\n";
+
+                std::cout
+                    << "Peak Queue Size    : "
+                    << m_queue.PeakQueueSize()
+                    << "\n";
+
+                std::cout
+                    << "Total Pushes       : "
+                    << m_queue.TotalPushes()
+                    << "\n";
+
+                std::cout
+                    << "Total Pops         : "
+                    << m_queue.TotalPops()
+                    << "\n";
+
+                std::cout
+                    << "Dropped Frames     : "
+                    << m_queue.DroppedFrames()
+                    << "\n";
+
+                std::cout
+                    << "========================================\n\n";
+            }
         }
     }
 
